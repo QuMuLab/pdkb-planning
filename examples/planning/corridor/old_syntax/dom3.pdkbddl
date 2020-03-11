@@ -1,0 +1,81 @@
+agents:a,b,c
+
+propositions:q,at_1,at_2,at_3,at_4
+
+depth:3
+
+types:0
+
+actions:7
+
+name:right
+derived-condition:always
+precondition:0
+nondet-effects:1
+effects:6
+add:at_1 --> at_2
+add:at_1 --> !at_1
+add:at_2 --> at_3
+add:at_2 --> !at_2
+add:at_3 --> at_4
+add:at_3 --> !at_3
+
+name:left
+derived-condition:always
+precondition:0
+nondet-effects:1
+effects:6
+add:at_4 --> at_3
+add:at_4 --> !at_4
+add:at_3 --> at_2
+add:at_3 --> !at_3
+add:at_2 --> at_1
+add:at_2 --> !at_2
+
+name:sense
+derived-condition:always
+precondition:1
+at_2
+nondet-effects:1
+effects:1
+add:Ba q
+
+name:shout-1
+derived-condition:always
+precondition:2
+at_1
+Ba q
+nondet-effects:1
+effects:1
+add:Bb q
+
+name:shout-2
+derived-condition:always
+precondition:2
+at_2
+Ba q
+nondet-effects:1
+effects:2
+add:Bb q
+add:Bc q
+
+name:shout-3
+derived-condition:always
+precondition:2
+at_3
+Ba q
+nondet-effects:1
+effects:2
+add:Bb q
+add:Bc q
+
+name:shout-4
+derived-condition:always
+precondition:2
+at_4
+Ba q
+nondet-effects:1
+effects:1
+add:Bc q
+
+{include:prob.pdkbddl}

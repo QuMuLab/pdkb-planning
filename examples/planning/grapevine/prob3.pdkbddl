@@ -1,0 +1,30 @@
+
+{include:domain-small.pdkbddl}
+
+(define (problem prob3)
+
+    (:domain grapevine)
+
+    (:objects l1 l2 - loc)
+
+    (:projection )
+    (:depth 2)
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+
+        (connected l1 l2)
+        (connected l2 l1)
+
+        (forall ?ag - agent (at ?ag l1))
+
+        (forall ?ag - agent
+            [?ag](secret ?ag))
+    )
+
+    (:goal
+           [a](secret b)
+       ![b][a](secret b)
+    )
+)

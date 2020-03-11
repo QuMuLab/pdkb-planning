@@ -1,0 +1,54 @@
+
+(define (domain hattari4-single)
+
+    (:agents a b c d)
+
+    (:types spot card)
+
+    (:constants
+        spot1 spot2 spot3 - spot
+        c1 c2 c3 c4 c5 c6 c7 c8 - card)
+
+    (:predicates
+            (suspect ?s - spot ?c - card)
+            (victim ?c - card)
+            (holding ?a - agent ?c - card)
+        {AK}(neighbour ?a1 ?a2 - agent)
+        {AK}(me ?ag - agent)
+    )
+
+    (:action check
+        :derive-condition   never
+        :parameters         (?ag - agent ?c - card)
+        :precondition       (and)
+        :effect             (and (when (me ?ag) (holding ?ag ?c))
+                                 (when (holding ?ag ?c) [?ag](holding ?ag ?c)))
+    )
+
+    (:action rotate
+        :derive-condition   always
+        :parameters         ()
+        :precondition       (and)
+        :effect             (and (forall ?ag1 - agent
+                                    (forall ?ag2 - agent
+                                        (forall ?c - card (and
+
+                                            (when (holding ?ag1 ?c)
+                                                        ; ==>
+                                                  (!holding ?ag1 ?c))
+
+                                            (when (and (holding ?ag1 ?c) (neighbour ?ag1 ?ag2))
+                                                        ; ==>
+                                                  (holding ?ag2 ?c))
+
+                                        )))))
+    )
+
+    (:action peek
+        :derive-condition   never
+        :parameters         (?ag - agent ?s - spot  ?c - card)
+        :precondition       (and)
+        :effect             (and (when (me ?ag) (suspect ?s ?c))
+                                 (when (suspect ?s ?c) [?ag](suspect ?s ?c)))
+    )
+)

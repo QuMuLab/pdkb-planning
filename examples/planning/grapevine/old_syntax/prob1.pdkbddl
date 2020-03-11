@@ -1,0 +1,20 @@
+{include:domain.pdkbddl}
+
+problem:valid_generation
+
+projection:
+
+complete-init:8
+at_a_1
+at_b_1
+at_c_1
+at_d_1
+Ba sa
+Bb sb
+Bc sc
+Bd sd
+
+goal:3
+Bb sa
+!Bc sa
+!Bd sa

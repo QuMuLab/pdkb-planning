@@ -1,0 +1,11 @@
+3 2 p,q
+B1 !B2 !B1 !q
+END
+Random pekb that seems to cause problems.
+
+Superset of the found PEKB
+!B2 !B1 !B2 p
+B1 !B2 B1 !q
+B1 !B2 !B1 !q
+B1 !B2 B1 p
+!B2 B1 q

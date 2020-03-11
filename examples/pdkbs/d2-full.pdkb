@@ -1,0 +1,13 @@
+2 2 p,q
+B1 q
+B1 !p
+B1 B2 !q
+B1 B2 p
+B2 q
+B2 p
+B2 B1 !q
+B2 B1 !p
+p
+q
+END
+Test that sets everything nested for two agents at depth 2

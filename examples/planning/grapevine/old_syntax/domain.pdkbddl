@@ -1,0 +1,45 @@
+agents:a,b,c,d
+
+propositions:at_a_1,at_a_2,at_b_1,at_b_2,at_c_1,at_c_2,at_d_1,at_d_2,sa,sb,sc,sd
+
+depth:1
+
+types:6
+agent:a,b,c,d
+agent1:a,b,c,d
+agent2:a,b,c,d
+agent3:a,b,c,d
+room:1,2
+secret:sa,sb,sc,sd
+
+actions:3
+
+name:right_<agent>
+derived-condition:always
+precondition:1
+at_<agent>_1
+nondet-effects:1
+effects:2
+add:at_<agent>_2
+add:!at_<agent>_1
+
+name:left_<agent>
+derived-condition:always
+precondition:1
+at_<agent>_2
+nondet-effects:1
+effects:2
+add:at_<agent>_1
+add:!at_<agent>_2
+
+name:share_<agent>_<secret>_<room>
+derived-condition:at_?_<room>
+precondition:2
+at_<agent>_<room>
+B<agent> <secret>
+nondet-effects:1
+effects:4
+add:at_a_<room> --> Ba <secret>
+add:at_b_<room> --> Bb <secret>
+add:at_c_<room> --> Bc <secret>
+add:at_d_<room> --> Bd <secret>

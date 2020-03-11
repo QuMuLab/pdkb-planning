@@ -1,0 +1,33 @@
+
+{include:domain.pdkbddl}
+
+(define (problem future-reasoning)
+
+    (:domain envelope)
+
+    (:projection )
+    (:depth 2)
+    (:task valid_assessment)
+
+    (:init-type complete)
+    (:init
+
+        (forall ?ag1 - agent (and
+            <?ag1>(secret)
+            <?ag1>(!secret)
+            (forall ?ag2 - agent (and
+                [?ag2]<?ag1>(secret)
+                [?ag2]<?ag1>(!secret)))))
+
+        (secret)
+
+    )
+
+    (:goal (and [bob][alice](secret)))
+
+    (:plan
+        (check bob)
+        (check alice)
+    )
+
+)

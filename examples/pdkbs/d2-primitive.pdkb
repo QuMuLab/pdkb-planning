@@ -1,0 +1,5 @@
+2 2 p,q
+p
+!q
+END
+Test that knows nothing about 2 agents with depth 2

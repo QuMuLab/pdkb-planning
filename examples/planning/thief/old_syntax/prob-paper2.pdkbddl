@@ -1,0 +1,22 @@
+{include:domain.pdkbddl}
+
+problem:valid_assessment
+
+projection:g
+
+complete-init:8
+thief
+guard
+Bt thief
+Bg guard
+Bt !Bg thief
+Bt !Bg !thief
+Bg !Bt guard
+Bg !Bt !thief
+
+goal:1
+goal
+
+plan:2
+ThiefSeesGuard
+Trick

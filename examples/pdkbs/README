@@ -1,0 +1,26 @@
+A .pdkb file is made up of 1+k+1 lines where the first line is of the form:
+
+<depth> <# of agents> <propositions>
+
+...and the next k lines is a set of amls, one per line, and the final line is:
+
+END
+
+An example PDKB file:
+2 2 p,q
+B1 q
+B1 B2 !q
+END
+
+Assumptions:
+
+* <propositions> should be comma separated and contain no spaces.
+-- Examples: p,q,r  or  hot,cold,foo
+
+* <# of agents> should be less than 10 (to keep the parsing simple)
+
+* You can't use 'B' as a proposition (it makes parsing ambiguous)
+
+* The amls can contain spaces, but should only use 'B', '!',
+  the numbers 1-9, and propositions.
+-- Examples: B1B2p  or  B2 !B1 foo

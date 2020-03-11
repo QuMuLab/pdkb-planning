@@ -1,0 +1,124 @@
+
+A .pdkbddl file is made up of 8 or 9 parts, all separated by an empty line. At
+any point, {include:<file>} can be used to have a file included at that place
+in the current file -- <file> is relative to the local file. For example, if
+domain.pdkbddl exists in the same directory as problem.pdkbddl, then the first
+line of the latter can include the domain by stating {include:domain.pdkbddl}.
+Each part of the pdkbddl format is described in detail below:
+
+
+1. Agent list
+The first line of the file is of the following form, where <agents> is a
+comma-separated string
+
+agents:<agents>
+
+
+2. Proposition list
+The third line of the file is of the following form, where <props> is a
+comma-separated string
+
+propositions:<props>
+
+
+3. Depth bound
+The fifth line of the file is of the following form, where <bound> is an
+integer
+
+depth:<bound>
+
+
+4. Actions
+Following the goal PDKB and a single new line, the following line is given
+(where <num> is an integer)
+
+actions:<num>
+
+There are then <num> actions given, all separated by a single line (note:
+there is also a blank line before the first action). Each action has the
+following form:
+
+name:<action name>
+derived-condition:<cond>
+precondition:<n>
+<aml 1>
+...
+<aml n>
+nondet-effects:<m>
+{effect 1}
+...
+{effect m}
+
+The <cond> for derived-condition signifies the condition for commonly known
+conditional effects to be derived. If it is set to 'always' (or 'never'),
+then the derived conditional effect will always (or never) be computed. If
+not, then the <cond> takes the form of [<pos-cond>][ / <neg-cond>] with the
+interpretation given below, and possibly with the use of the '?' character
+signifying that an agent argument should be used. E.g., at_loc2_?
+
+Each effect {effect i} is a multi-line chunk of the following form:
+effects:<n>
+<type 1>:[<pos-cond 1>[ / <neg-cond 1>] --> ][<eff 1>][ obs if <pos-cond>[ / <neg-cond>]]
+...
+<type n>:[<pos-cond n>[ / <neg-cond n>] --> ][<eff n>][ obs if <pos-cond>[ / <neg-cond>]]
+
+Here, <type> can be either 'add' or 'del'. If the former is used, then <eff>
+is added to the state. If the latter is used, then <eff> is removed from the
+state. The arrow ' --> ' only needs to be present if there is a condition.
+The separator ' / ' only needs to be present if there are negative RMLs in
+the condition. <pos-cond> are those RMLs that must be present while <neg-cond>
+are those RMLs that must /not/ be present in order for the conditional effect
+to fire. The 'obs if' section optionally specifies effect-specific conditions
+for mutual awareness. The syntax used is the same as the conditions for mutual
+awareness above.
+
+
+5. Problem type
+This line indicates the problem type as follows:
+problem:<type>
+
+...where <type> is one of the following problem types:
+ (a) valid_generation: Generate a valid plan
+ (b) valid_assessment: Assess a given plan for validity
+ (c) plausible_generation: Generate a plausible plan
+ (d) plausible_assessment: Assess a given plan for plausibility
+
+
+6. Agent Projection
+This line of the file is one of the following form, where <nesting> is
+a comma-separated string of agent id's
+
+projection:<nesting>
+
+
+7. Initial PDKB
+The next line of the file is of the following form, where <num> is an
+integer
+
+[complete-]init:<num>
+
+If 'complete-init' is used, then the initial state will assume to have all
+of the knowledge in the system -- any !B... formula that doesn't contradict
+the existing knowledge will be assumed in the full initial state. If just
+'init' is used, then the initial state is closed, but the root reasoning
+agent is not assumed to be omniscient. The following <num> lines contain
+one aml per line.
+
+
+8. Goal PDKB
+Following the initial PDKB and a single new line, the following line is
+given (where <num> is an integer)
+
+goal:<num>
+
+The following <num> lines contain one aml per line.
+
+
+9. Action Sequence
+If the planning type is either (b) or (d) (i.e., a plan assessment), then
+following a blank line there should be a line of the following format, where
+<num> is an integer
+
+plan:<num>
+
+The following <num> lines contain one action string per line.

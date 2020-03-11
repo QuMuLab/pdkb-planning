@@ -1,0 +1,21 @@
+{include:domain.pdkbddl}
+
+(define (problem prob1)
+
+    (:domain thief)
+
+    (:projection )
+    (:depth 2)
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+              (thief)
+              (guard)
+           [t](thief)
+           [g](guard)
+    )
+
+    (:goal (goal))
+
+)

@@ -1,0 +1,41 @@
+
+{include:domain-single.pdkbddl}
+
+(define (problem hattari4-open)
+
+    (:domain hattari4)
+
+    (:projection )
+    (:depth 1)
+    (:task valid_assessment)
+
+    (:init-type complete)
+    (:init
+
+        ; Set up the player order
+        (neighbour a b)
+        (neighbour b c)
+        (neighbour c d)
+        (neighbour d a)
+
+        (me a)
+
+    )
+
+    (:goal (and))
+
+    (:plan
+        (check a c1)
+        (check b c2)
+        (check c c3)
+        (check d c4)
+        (rotate)
+        (check a c4)
+        (check b c1)
+        (check c c2)
+        (check d c3)
+        (peek a spot1 c5)
+        (peek a spot2 c6)
+    )
+
+)

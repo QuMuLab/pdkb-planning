@@ -1,0 +1,51 @@
+
+{include:domain.pdkbddl}
+
+(define (problem testprob)
+
+    (:domain grapevine)
+
+    (:objects l1 l2 - loc)
+
+    (:projection )
+    (:depth 1)
+    (:task valid_assessment)
+
+    (:init-type complete)
+    (:init
+
+        (connected l1 l2)
+        (connected l2 l1)
+
+        (forall ?ag - agent (at ?ag l1))
+
+        (forall ?ag - agent
+            [?ag](secret ?ag))
+    )
+
+    (:goal
+        [a](secret b)
+        [b](secret c)
+        [c](secret d)
+        [d](secret a)
+       ![a](secret d)
+       ![b](secret a)
+       ![c](secret b)
+       ![d](secret c)
+    )
+
+    (:plan
+        (move a l1 l2)
+        (move b l1 l2)
+        (share b b l2)
+        (move a l2 l1)
+        (move c l1 l2)
+        (share c c l2)
+        (move b l2 l1)
+        (move d l1 l2)
+        (share d d l2)
+        (move c l2 l1)
+        (move a l1 l2)
+        (share a a l2)
+    )
+)

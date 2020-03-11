@@ -1,0 +1,14 @@
+{include:domain.pdkbddl}
+
+problem:valid_generation
+
+projection:
+
+complete-init:4
+thief
+guard
+Bt thief
+Bg guard
+
+goal:1
+goal

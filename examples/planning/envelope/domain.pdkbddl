@@ -1,0 +1,17 @@
+
+(define (domain envelope)
+
+    (:agents alice bob)
+
+    (:types )
+
+    (:predicates (secret) )
+
+    (:action check
+        :derive-condition   always
+        :parameters         (?ag - agent)
+        :precondition       (and)
+        :effect             (and (when  (secret) [?ag](secret))
+                                 (when (!secret) [?ag](!secret)))
+    )
+)

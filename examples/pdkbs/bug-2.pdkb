@@ -1,0 +1,6 @@
+3 2 p,q,r
+!B1 B2 r
+B2 B1 r
+!r
+END
+Random pekb that seems to cause problems.

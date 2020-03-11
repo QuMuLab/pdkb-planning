@@ -1,0 +1,34 @@
+{include:domain.pdkbddl}
+
+problem:valid_assessment
+
+projection:
+
+complete-init:3
+at_<agent>_1
+B<agent1> at_<agent2>_1
+B<agent> s<agent>
+
+goal:8
+Ba sb
+Bb sc
+Bc sd
+Bd sa
+!Ba sd
+!Bb sa
+!Bc sb
+!Bd sc
+
+plan:12
+right_a
+right_b
+share_b_sb_2
+left_a
+right_c
+share_c_sc_2
+left_b
+right_d
+share_d_sd_2
+left_c
+right_a
+share_a_sa_2
