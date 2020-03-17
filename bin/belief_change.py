@@ -10,7 +10,7 @@ AXIOM_SYSTEMS = [KD, KT]
 if __name__ == '__main__':
 
     if len(sys.argv) < 2 or len(sys.argv) > 3 or sys.argv[1] not in ['run', 'assess']:
-        print "\n Usage: python belief-change.py [run|assess] \n"
+        print("\n Usage: python belief-change.py [run|assess] \n")
         sys.exit(1)
 
     file_basename = 'belief_change'
