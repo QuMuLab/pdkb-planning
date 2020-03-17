@@ -1,8 +1,6 @@
 import abc
 
-class KB(object):
-    __metaclass__ = abc.ABCMeta
-
+class KB(object, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def size(self):
         return NotImplemented

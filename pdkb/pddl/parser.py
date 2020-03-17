@@ -1,11 +1,11 @@
 
 import sys
 from collections import OrderedDict
-from formula import Formula, And, Primitive, Forall, When, Xor, Not, Oneof, Or
-from action import Action
-from predicate import Predicate
-from pddl_tree import PDDL_Tree
-from utils import PDDL_Utils
+from .formula import Formula, And, Primitive, Forall, When, Xor, Not, Oneof, Or
+from .action import Action
+from .predicate import Predicate
+from .pddl_tree import PDDL_Tree
+from .utils import PDDL_Utils
 
 
 class Problem(object):
@@ -82,7 +82,7 @@ class Problem(object):
         """Return True iff this problem is the same as the given problem."""
         assert isinstance (p, Problem), "Must be comparing two of same type"
         if self.objects != p.objects:
-            print "objects"
+            print("objects")
             return False
 
         if self.init != p.init:
@@ -94,19 +94,19 @@ class Problem(object):
             return False
 
         if self.goal != p.goal:
-            print "goal"
+            print("goal")
             return False
 
         if not all ([sa == pa for sa, pa in zip (self.actions, p.actions)]):
-            print "actions"
+            print("actions")
             return False
 
         if not all ([sp == pp for sp, pp in zip (self.predicates, p.predicates)]):
-            print "predicates"
+            print("predicates")
             return False
 
         if self.types != p.types or self.parent_types != p.parent_types:
-            print "types"
+            print("types")
             return False
 
         return True
@@ -128,7 +128,7 @@ class Problem(object):
 
         # types
         #TODO likely wrong, doesn't capture the type hierarchy
-        s = " ".join (filter(lambda t: t!= Predicate.OBJECT, self.types))
+        s = " ".join ([t for t in self.types if t!= Predicate.OBJECT])
         fp.write (sp + "(:types %s)%s" %(s, "\n"))
 
         # predicates
@@ -216,24 +216,24 @@ class Problem(object):
         d["Obj -> Type Mapping"] = self.obj_to_type
         #d["Type -> Obj Mapping"] = self.type_to_obj
 
-        for k, v in d.iteritems():
-            print "*** %s ***" % k
+        for k, v in d.items():
+            print("*** %s ***" % k)
             if isinstance(v, dict):
                 if len(v) == 0:
-                    print "\t<no items>"
-                for k, val in v.iteritems():
-                    print "\t%s -> %s" % (k, str(val))
+                    print("\t<no items>")
+                for k, val in v.items():
+                    print("\t%s -> %s" % (k, str(val)))
             elif hasattr(v, '__iter__'):
                 if len(v) == 0:
-                    print "\tNone"
+                    print("\tNone")
                 elif k == "Actions":
                     for action in self.actions:
                         action.dump(lvl=1)
                 else:
-                    print "\t" + "\n\t".join([str(item) for item in v])
+                    print("\t" + "\n\t".join([str(item) for item in v]))
             else:
-                print "\t" + str(v)
-            print ""
+                print("\t" + str(v))
+            print("")
 
     def _parse_domain(self, f_domain):
         """
@@ -289,7 +289,7 @@ class Problem(object):
                 self.parent_types[Predicate.OBJECT] = None
                 self.types.add(Predicate.OBJECT)
                 self.type_to_obj[Predicate.OBJECT] = set([])
-                for obj, type_list in self.obj_to_type.iteritems():
+                for obj, type_list in self.obj_to_type.items():
                     type_list.add(Predicate.OBJECT)
                     self.type_to_obj[Predicate.OBJECT].add(obj)
 
@@ -392,7 +392,7 @@ class Problem(object):
         self.init_type = parse_tree[":init-type"].children[0].name
         self.plan = []
         if ':plan' in parse_tree:
-            self.plan = map(lambda x: '_'.join(map(str, [x.name] + [y.name for y in x.children])), parse_tree[":plan"].children)
+            self.plan = ['_'.join(map(str, [x.name] + [y.name for y in x.children])) for x in parse_tree[":plan"].children]
 
 
     def to_action(self, node):
@@ -599,7 +599,7 @@ class Problem(object):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print "\nUsage: python parser.py <pdkbddl domain file> <pdkbddl problem file>\n"
+        print("\nUsage: python parser.py <pdkbddl domain file> <pdkbddl problem file>\n")
         sys.exit(1)
 
     Problem(sys.argv[1], sys.argv[2])

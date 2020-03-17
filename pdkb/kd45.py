@@ -121,7 +121,7 @@ class PDKB(KB):
         if allow_repeat:
             all_rmls = self.all_rmls
         else:
-            all_rmls = filter(no_repeats, self.all_rmls)
+            all_rmls = list(filter(no_repeats, self.all_rmls))
 
         CW = set()
         for rml in all_rmls:
@@ -195,7 +195,7 @@ class PDKB(KB):
             DEBUG += '  '
 
         if DEBUG:
-            print "\n\n%sGenerating for rmls: %s" % (DEBUG, str(rmls))
+            print("\n\n%sGenerating for rmls: %s" % (DEBUG, str(rmls)))
 
         if 0 == len(rmls):
             return set()
@@ -210,18 +210,18 @@ class PDKB(KB):
 
         # Split the rmls into universal belief (B \phi) and existential (P \phi)
         #  and strip the initial modal operator
-        universal_rmls = set([rml.rml for rml in filter(lambda x: isinstance(x, Belief), rmls)])
+        universal_rmls = set([rml.rml for rml in [x for x in rmls if isinstance(x, Belief)]])
         existential_rmls = set([rml.rml for rml in (rmls - universal_rmls)])
 
-        assert all([cur_ag != rml.agent for rml in filter(lambda x: not x.is_lit(), universal_rmls | existential_rmls)])
+        assert all([cur_ag != rml.agent for rml in [x for x in universal_rmls | existential_rmls if not x.is_lit()]])
 
         # lits will be the literals that must hold in all worlds
-        lits = set(filter(lambda x: x.is_lit(), universal_rmls))
-        props = set(map(lambda x: x.get_prop(), lits))
+        lits = set([x for x in universal_rmls if x.is_lit()])
+        props = set([x.get_prop() for x in lits])
         universal_rmls -= lits
 
         # The existential lits must not disagree with lits
-        ex_lits = set(filter(lambda x: x.is_lit(), existential_rmls))
+        ex_lits = set([x for x in existential_rmls if x.is_lit()])
         assert all([neg(lit) not in lits for lit in ex_lits]), \
                "Error: Tried an existential literal with conflicting belief. E.g., Bp & P!p"
         existential_rmls -= ex_lits
@@ -232,13 +232,13 @@ class PDKB(KB):
 
         for rml in existential_rmls:
             if neg(rml) in universal_rmls:
-                print "%s!!Warning!! Inconsistent existential rml: %s" % (DEBUG, str(rml))
+                print("%s!!Warning!! Inconsistent existential rml: %s" % (DEBUG, str(rml)))
 
         if DEBUG:
-            print "%sAgent: %s" % (DEBUG, str(cur_ag))
-            print "%sLits: %s" % (DEBUG, str(lits))
-            print "%sUniversal RMLs: %s" % (DEBUG, str(universal_rmls))
-            print "%sExistential RMLs: %s" % (DEBUG, str(existential_rmls))
+            print("%sAgent: %s" % (DEBUG, str(cur_ag)))
+            print("%sLits: %s" % (DEBUG, str(lits)))
+            print("%sUniversal RMLs: %s" % (DEBUG, str(universal_rmls)))
+            print("%sExistential RMLs: %s" % (DEBUG, str(existential_rmls)))
 
         if self.compressed or len(props) == len(self.props):
             w = World({lit.get_prop(): (not lit.negated) for lit in lits})
@@ -261,7 +261,7 @@ class PDKB(KB):
             new_worlds = self._generate_kripke(M, filter_agent(universal_rmls, next_ag), DEBUG)
 
             if DEBUG:
-                print "%sNew worlds for universal rmls, are: %s" % (DEBUG, str(new_worlds))
+                print("%sNew worlds for universal rmls, are: %s" % (DEBUG, str(new_worlds)))
 
             next_worlds[next_ag] = new_worlds
             for w2 in new_worlds:
@@ -279,7 +279,7 @@ class PDKB(KB):
             new_worlds = self._generate_kripke(M, set([rml]) | filter_agent(universal_rmls, rml.agent), DEBUG)
 
             if DEBUG:
-                print "%sNew worlds for existential rml, %s, are: %s" % (DEBUG, str(rml), str(new_worlds))
+                print("%sNew worlds for existential rml, %s, are: %s" % (DEBUG, str(rml), str(new_worlds)))
 
             for w2 in new_worlds:
                 M.connect(w, w2, rml.agent)
@@ -384,7 +384,7 @@ def filter_agent(rmls, ag):
 
 
 def project(rmls, ag):
-    return set([rml.rml for rml in filter_agent(filter(lambda x: isinstance(x, Belief), rmls), ag)])
+    return set([rml.rml for rml in filter_agent([x for x in rmls if isinstance(x, Belief)], ag)])
 
 CLOSURE = dict([(KD, [kd_closure]),
                 (KT, [kt_closure, kd_closure]),
@@ -394,50 +394,50 @@ CLOSURE = dict([(KD, [kd_closure]),
 
 if __name__ == '__main__':
 
-    print "\n----\n"
+    print("\n----\n")
 
     l1 = Literal('p')
     l2 = Belief(2, Belief(1, l1))
     l3 = Belief(2, neg(Belief(1, neg(l1))))
     l4 = neg(l3)
-    print "%s -> %s" % (str(l2), str(map(str, kd_closure(l2))))
-    print "%s -> %s" % (str(l3), str(map(str, kd_closure(l3))))
+    print("%s -> %s" % (str(l2), str(list(map(str, kd_closure(l2))))))
+    print("%s -> %s" % (str(l3), str(list(map(str, kd_closure(l3))))))
 
-    print "\n----\n"
+    print("\n----\n")
 
-    kb = PDKB(2, [1,2], map(Literal, ['p', 'q']))
+    kb = PDKB(2, [1,2], list(map(Literal, ['p', 'q'])))
     kb.add_rml(l2)
-    print kb
+    print(kb)
     kb.logically_close()
-    print kb
+    print(kb)
 
-    print "\n----\n"
+    print("\n----\n")
 
     kb.add_rml(l4)
-    print kb
+    print(kb)
     kb.logically_close()
-    print kb
+    print(kb)
     kb.logically_close()
-    print kb
-    print kb.is_consistent()
+    print(kb)
+    print(kb.is_consistent())
 
-    print "\n----\n"
+    print("\n----\n")
 
-    kb = PDKB(2, [1,2], map(Literal, ['p', 'q']))
+    kb = PDKB(2, [1,2], list(map(Literal, ['p', 'q'])))
     kb.add_rml(Belief(1, Literal('p')))
     kb.add_rml(Belief(2, Literal('q')))
     kb.add_rml(Belief(1, Belief(2, Literal('q'))))
-    print kb
-    print "\n...projecting on agent 1\n"
-    print project(kb.rmls, 1)
+    print(kb)
+    print("\n...projecting on agent 1\n")
+    print(project(kb.rmls, 1))
 
-    print "\n----\n"
+    print("\n----\n")
 
-    kb = PDKB(1, [1], map(Literal, ['p', 'q']))
+    kb = PDKB(1, [1], list(map(Literal, ['p', 'q'])))
     kb.add_rml(Belief(1, Literal('p')))
     kb.add_rml(Belief(1, neg(Literal('q'))))
     M = kb.generate_kripke()
-    print M
+    print(M)
     M.generate_dot("graph.dot")
 
-    print "\n----\n"
+    print("\n----\n")

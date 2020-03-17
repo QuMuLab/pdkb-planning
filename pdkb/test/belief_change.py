@@ -16,21 +16,21 @@ QUERIES_PER_PDKB = 30
 if 'small' == TYPE:
     SIZE = (20, 30)
     DEPTH = (2,3)
-    FLUENTS = map(Literal, 'pqr')
+    FLUENTS = list(map(Literal, 'pqr'))
     FLUENT_RANGE = (2,3)
     RMLS = (3,8)
 
 elif 'normal' == TYPE:
     SIZE = (30,60)
     DEPTH = (4,7)
-    FLUENTS = map(Literal, 'pqrst')
+    FLUENTS = list(map(Literal, 'pqrst'))
     FLUENT_RANGE = (3,5)
     RMLS = (13,39)
 
 elif 'big' == TYPE:
     SIZE = (10,100)
     DEPTH = (3,10)
-    FLUENTS = map(Literal, 'pqrstvwxyz')
+    FLUENTS = list(map(Literal, 'pqrstvwxyz'))
     FLUENT_RANGE = (5,10)
     RMLS = (50,150)
 
@@ -106,13 +106,13 @@ def doit(filename):
             elif size == skip_size and dep < skip_dep:
                 continue
 
-            print
-            print "--------------"
-            print "   %d x %d" % (size, dep)
-            print "--------------"
+            print()
+            print("--------------")
+            print("   %d x %d" % (size, dep))
+            print("--------------")
             (times, sizes) = get_size_and_time(size, dep, FLUENTS)
-            print
-            print "-------------------------"
+            print()
+            print("-------------------------")
 
             append_file(filename, "\n%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f" % (size, dep, len(FLUENTS), sizes[0], sizes[1], sizes[2], times[0], times[1], times[2], times[3], times[4], times[5]))
 
@@ -129,7 +129,7 @@ def doit(filename):
 
 def get_size_and_time(num_agents, depth, fluents):
 
-    agents = range(1, num_agents + 1)
+    agents = list(range(1, num_agents + 1))
 
     def generate_kbs():
         numRMLs = num_agents #num_agents * depth * 2
@@ -237,7 +237,7 @@ def get_size_and_time(num_agents, depth, fluents):
             #           (len(kbs[i].agents), kbs[i].depth, len(kbs[i].props), len(kbs[i].rmls), len(closed_kbs[i].rmls), infs[i].size(), closed_kbs[i].size(), kbs[i].size(),
             #            inf_time[i], closure_time[i], inf_query, closed_query, indexed_query, str(ans1)))
 
-    print "Performing random successful queries..."
+    print("Performing random successful queries...")
     times = [0.0,0.0,0.0,0.0,0.0,0.0]
     for i in range(NUM_PDKBS):
 
@@ -269,7 +269,7 @@ def get_size_and_time(num_agents, depth, fluents):
             #                inf_time[i], closure_time[i], inf_query, closed_query, indexed_query, str(ans1)))
 
     sizes = [0.0, 0.0, 0.0]
-    print "Performing random unsuccessful queries..."
+    print("Performing random unsuccessful queries...")
     for i in range(NUM_PDKBS):
 
         (infs_kb, closed_kb, indexed_kb) = generate_kbs()
@@ -317,7 +317,7 @@ def get_size_and_time(num_agents, depth, fluents):
     sizes[1] /= float(NUM_PDKBS)
     sizes[2] /= float(NUM_PDKBS)
 
-    print "\nDone!\n"
+    print("\nDone!\n")
 
     return (times, sizes)
 
@@ -413,13 +413,13 @@ def checkit(filename):
         plt.show()
 
 
-    print "Plotting query time..."
+    print("Plotting query time...")
     plot_data(data, [V_KT_QUERY, V_KD_QUERY, CLOSURE_KD_QUERY, CLOSURE_KT_QUERY], [V_KT, V_KD, CLOSURE_KD, CLOSURE_KT], 'Query Time ($log_e(sec)$)', 'time.eps')
 
-    print "Plotting size..."
+    print("Plotting size...")
     plot_data(data, [CLOSURE_KT_SIZE, CLOSURE_KD_SIZE, V_KD_SIZE, V_KT_SIZE], [CLOSURE_KT, CLOSURE_KD, V_KD, V_KT], 'Size (x1000)', 'size.eps')
 
-    print "Plotting update time..."
+    print("Plotting update time...")
     plot_data(data, [CLOSURE_KT_UPDATE, CLOSURE_KD_UPDATE, V_KT_UPDATE, V_KD_UPDATE], [CLOSURE_KT, CLOSURE_KD, V_KT, V_KD], 'Update Time ($log_e(sec)$)', 'update_time.eps')
 
 

@@ -1,6 +1,6 @@
 
-from kd45 import *
-from rml import *
+from .kd45 import *
+from .rml import *
 
 class INF:
 
@@ -23,16 +23,16 @@ class INF:
 
         # PDKB2INF from AAMAS paper
 
-        P = set(filter(lambda x: x.is_lit(), kb))
-        Bs = set(filter(lambda x: isinstance(x, Belief), kb))
+        P = set([x for x in kb if x.is_lit()])
+        Bs = set([x for x in kb if isinstance(x, Belief)])
         Ds = kb - (P | Bs)
 
         B = {}
         D = {}
 
         for ag in agents:
-            B[ag] = set([rml.rml for rml in filter(lambda x: x.agent == ag, Bs)])
-            D[ag] = set([rml.rml for rml in filter(lambda x: x.agent == ag, Ds)])
+            B[ag] = set([rml.rml for rml in [x for x in Bs if x.agent == ag]])
+            D[ag] = set([rml.rml for rml in [x for x in Ds if x.agent == ag]])
 
         self.props = P
 

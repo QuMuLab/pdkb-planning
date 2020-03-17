@@ -1,3 +1,4 @@
+from functools import reduce
 
 
 class Structure:
@@ -35,7 +36,7 @@ class Structure:
         return worlds
 
     def assess_rml(self, rml, w = None):
-        from rml import neg, Belief, Possible
+        from .rml import neg, Belief, Possible
         if not w:
             w = self.root
         if rml.is_lit():
@@ -80,7 +81,7 @@ class Structure:
                     G.add_edge(w2i[w1], w2i[w2], label=str(ag))
 
         if compress:
-            leaves = filter(lambda x: 0 == G.out_degree(x), G.nodes())
+            leaves = [x for x in G.nodes() if 0 == G.out_degree(x)]
 
             G2 = nx.DiGraph()
             i2h = {}
@@ -98,7 +99,7 @@ class Structure:
             while changed:
 
                 changed = False
-                new_nodes = filter(lambda x: set(G.successors(x)) <= done, remaining)
+                new_nodes = [x for x in remaining if set(G.successors(x)) <= done]
 
                 if len(new_nodes) > 0:
 
@@ -117,7 +118,7 @@ class Structure:
                     remaining -= set(new_nodes)
 
             if 0 != len(remaining):
-                print "Warning: Didn't map every node"
+                print("Warning: Didn't map every node")
 
             nx.write_dot(G2, fname)
 
@@ -135,7 +136,7 @@ class Structure:
         for ag in self.R:
             for w in self.worlds:
                 if w not in self.R[ag] or 0 == len(self.R[ag][w]):
-                    print "Failed serial check because of agent %s and world %s" % (str(ag), str(w))
+                    print("Failed serial check because of agent %s and world %s" % (str(ag), str(w)))
                     return False
         return True
 
@@ -145,12 +146,12 @@ class Structure:
                 for w2 in self.R[ag][w1]:
                     if w2 not in self.R[ag]:
                         if self.debug_checks:
-                            print "Failed euclidean check because of agent %s, source %s, and missing target source %s" % (str(ag), str(w1), str(w2))
+                            print("Failed euclidean check because of agent %s, source %s, and missing target source %s" % (str(ag), str(w1), str(w2)))
                         return False
                     for w3 in self.R[ag][w1]:
                         if w3 not in self.R[ag][w2]:
                             if self.debug_checks:
-                                print "Failed euclidean check because of agent %s, source %s, successor w2 %s, and successor w3 %s" % (str(ag), str(w1), str(w2), str(w3))
+                                print("Failed euclidean check because of agent %s, source %s, successor w2 %s, and successor w3 %s" % (str(ag), str(w1), str(w2), str(w3)))
                             return False
         return True
 
@@ -163,7 +164,7 @@ class Structure:
                     for w3 in self.R[ag][w2]:
                         if w3 not in self.R[ag][w1]:
                             if self.debug_checks:
-                                print "Failed transitive check because of agent %s, w1 %s, w2 %s, and w3 %s" % (str(ag), str(w1), str(w2), str(w3))
+                                print("Failed transitive check because of agent %s, w1 %s, w2 %s, and w3 %s" % (str(ag), str(w1), str(w2), str(w3)))
                             return False
         return True
 
@@ -172,7 +173,7 @@ class Structure:
             for w1 in self.R[ag]:
                 if w1 not in self.R[ag][w1]:
                     if self.debug_checks:
-                        print "Failed reflexive check because of agent %s and world %s" % (str(ag), str(w1))
+                        print("Failed reflexive check because of agent %s and world %s" % (str(ag), str(w1)))
                     return False
         return True
 
@@ -182,7 +183,7 @@ class Structure:
                 for w2 in self.R[ag][w1]:
                     if w1 not in self.R[ag][w2]:
                         if self.debug_checks:
-                            print "Failed symmetric check because of agent %s, w1 %s, and w2 %s" % (str(ag), str(w1), str(w2))
+                            print("Failed symmetric check because of agent %s, w1 %s, and w2 %s" % (str(ag), str(w1), str(w2)))
                         return False
         return True
 
@@ -221,26 +222,26 @@ class Structure:
     
     def dump(self):
 
-        print self.get_stats()
+        print(self.get_stats())
 
         w2i = {}
         i2w = {}
         i = 1
 
-        print "Worlds:"
+        print("Worlds:")
         for w in self.worlds:
             w2i[w] = i
             i2w[i] = w
-            print " %d: %s" % (i, str(w))
+            print(" %d: %s" % (i, str(w)))
             i += 1
         
-        print
+        print()
         
         for ag in self.R:
-            print "Accessability for agent %s:" % str(ag)
+            print("Accessability for agent %s:" % str(ag))
             for w1 in self.R[ag]:
                 for w2 in self.R[ag][w1]:
-                    print "%d --> %d" % (w2i[w1], w2i[w2])
+                    print("%d --> %d" % (w2i[w1], w2i[w2]))
 
         return toRet
 

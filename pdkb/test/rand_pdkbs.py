@@ -18,15 +18,15 @@ from krrt.utils import read_file, write_file, get_file_list
 def test0():
     test_files = get_file_list('examples/', match_list=['.pdkb'])
     for f in test_files:
-        print "\n Testing file: %s" % f
+        print("\n Testing file: %s" % f)
         parse_test_pdkb(f)
-        print "***"
-        print "*******************************************" * 2
-        print "*******************************************" * 2
-        print "***\n"
+        print("***")
+        print("*******************************************" * 2)
+        print("*******************************************" * 2)
+        print("***\n")
 
 def test1():
-    print "\n----\n"
+    print("\n----\n")
 
     l1 = Literal('p')
     l2 = Belief(2, Belief(1, l1))
@@ -36,48 +36,48 @@ def test1():
     l5 = neg(Belief(1, neg(Belief(2, l1))))
     l6 = neg(Belief(1, neg(Belief(2, Possible(3, Belief(4, l1))))))
 
-    print "KD closure operation:"
-    print "%s -> %s" % (str(l2), str(map(str, kd_closure(l2))))
-    print "%s -> %s" % (str(l3), str(map(str, kd_closure(l3))))
+    print("KD closure operation:")
+    print("%s -> %s" % (str(l2), str(list(map(str, kd_closure(l2))))))
+    print("%s -> %s" % (str(l3), str(list(map(str, kd_closure(l3))))))
 
-    print "\n----\n"
+    print("\n----\n")
 
-    kb = PDKB(2, [1,2], map(Literal, ['p', 'q']))
+    kb = PDKB(2, [1,2], list(map(Literal, ['p', 'q'])))
     kb.add_rml(l2)
-    print "Initial KB:"
-    print kb
-    print "\nClosing..."
+    print("Initial KB:")
+    print(kb)
+    print("\nClosing...")
     kb.logically_close()
-    print kb
+    print(kb)
 
-    print "\n----\n"
+    print("\n----\n")
 
     kb.add_rml(l4)
-    print "Initial Closed KB:"
+    print("Initial Closed KB:")
     kb.logically_close()
-    print kb
-    print "\nConsistent: %s" % str(kb.is_consistent())
+    print(kb)
+    print("\nConsistent: %s" % str(kb.is_consistent()))
 
-    print "\n----\n"
+    print("\n----\n")
 
-    kb = PDKB(2, [1,2], map(Literal, ['p', 'q']))
+    kb = PDKB(2, [1,2], list(map(Literal, ['p', 'q'])))
     kb.add_rml(Belief(1, Literal('p')))
     kb.add_rml(Belief(2, Literal('q')))
     kb.add_rml(Belief(1, Belief(2, Literal('q'))))
     kb.add_rml(neg(Belief(1, Literal('q'))))
-    print "Initial KB:"
-    print kb
-    print "\n...projecting on agent 1\n"
-    print project(kb.rmls, 1)
+    print("Initial KB:")
+    print(kb)
+    print("\n...projecting on agent 1\n")
+    print(project(kb.rmls, 1))
 
-    print "\n----\n"
+    print("\n----\n")
 
     
 
 
 def test2():
 
-    kb = PDKB(1, [1], map(Literal, ['p', 'q']))
+    kb = PDKB(1, [1], list(map(Literal, ['p', 'q'])))
 
     l1 = neg(Literal('p'))
     l2 = Belief(1, Literal('p'))
@@ -90,7 +90,7 @@ def test2():
     test_kripke(kb, [l1, l2, l3])
 
 def test3():
-    kb = PDKB(1, [1], map(Literal, ['p', 'q']))
+    kb = PDKB(1, [1], list(map(Literal, ['p', 'q'])))
 
     l1 = Literal('p')
     l2 = Belief(1, Literal('q'))
@@ -101,7 +101,7 @@ def test3():
     test_kripke(kb, [l1, l2])
 
 def test4():
-    kb = PDKB(1, [1,2], map(Literal, ['p', 'q', 'r']))
+    kb = PDKB(1, [1,2], list(map(Literal, ['p', 'q', 'r'])))
 
     rmls = [
         Literal('p'),
@@ -115,7 +115,7 @@ def test4():
     test_kripke(kb, rmls)
 
 def test5():
-    kb = PDKB(2, [1,2], map(Literal, ['p', 'q']))
+    kb = PDKB(2, [1,2], list(map(Literal, ['p', 'q'])))
 
     rmls = [
         Literal('p'),
@@ -130,23 +130,23 @@ def test5():
 
 
 def test6():
-    print "-- START TEST 6 --"
+    print("-- START TEST 6 --")
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system
-        kb1 = PDKB(1, [1,2], map(Literal, ['p', 'q']))
-        kb2 = PDKB(1, [1,2], map(Literal, ['p', 'q']))
+        kb1 = PDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
+        kb2 = PDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         test_expand(kb1, kb2)
 
         # Test that adding an RML already implied does nothing
-        kb1 = IndexedPDKB(1, [1,2], map(Literal, ['p', 'q']))
+        kb1 = IndexedPDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         kb1.expand(set([Belief(1, Literal('p'))]))
         kb2 = kb1.copy()
         kb1.expand(set([Possible(1, Literal('p'))]))
         assert kb1 == kb2
 
         # Test that adding an RML that implies an existing RML removes that RML
-        kb1 = IndexedPDKB(1, [1,2], map(Literal, ['p', 'q']))
+        kb1 = IndexedPDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         kb1.expand(set([Possible(1, Literal('p'))]))
         old_size = kb1.size()
         kb1.expand(set([Belief(1, Literal('p'))]))
@@ -158,71 +158,71 @@ def test6():
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system
-        kb1 = IndexedPDKB(1, [1,2], map(Literal, ['p', 'q']))
-        kb2 = IndexedPDKB(1, [1,2], map(Literal, ['p', 'q']))
+        kb1 = IndexedPDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
+        kb2 = IndexedPDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         test_expand(kb1, kb2)       
 
-    print "-- END TEST 6 --\n"
+    print("-- END TEST 6 --\n")
 
 def test7():
 
-    print "-- START TEST 7 --"
+    print("-- START TEST 7 --")
     AxiomSystem.SYSTEM = KD
-    kb = PDKB(1, [1,2,3], map(Literal, ['p', 'q']))
+    kb = PDKB(1, [1,2,3], list(map(Literal, ['p', 'q'])))
     test_remove(kb)
         
-    kb = IndexedPDKB(1, [1,2,3], map(Literal, ['p', 'q']))
+    kb = IndexedPDKB(1, [1,2,3], list(map(Literal, ['p', 'q'])))
     test_remove(kb)
 
     AxiomSystem.SYSTEM = KT
-    kb = PDKB(1, [1,2,3], map(Literal, ['p', 'q']))
+    kb = PDKB(1, [1,2,3], list(map(Literal, ['p', 'q'])))
     test_remove_kt(kb)
         
-    kb = IndexedPDKB(1, [1,2,3], map(Literal, ['p', 'q']))
+    kb = IndexedPDKB(1, [1,2,3], list(map(Literal, ['p', 'q'])))
     test_remove_kt(kb)
     
-    print "-- END TEST 7 --\n"
+    print("-- END TEST 7 --\n")
 
 def test8():
 
-    print "-- START TEST 8 --"
+    print("-- START TEST 8 --")
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system
-        kb = PDKB(1, [1,2], map(Literal, ['p', 'q']))
+        kb = PDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         test_update(kb)
 
-        indexed_kb = IndexedPDKB(1, [1,2], map(Literal, ['p', 'q']))
+        indexed_kb = IndexedPDKB(1, [1,2], list(map(Literal, ['p', 'q'])))
         test_update(indexed_kb)
 
-    print "-- END TEST 8 --\n"
+    print("-- END TEST 8 --\n")
 
 def test9():
-    print "-- START TEST 9 --"
+    print("-- START TEST 9 --")
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system
-        kb1 = PDKB(3, [1,2,3], map(Literal, ['p', 'q', 'r']))
-        kb2 = IndexedPDKB(3, [1,2,3], map(Literal, ['p', 'q', 'r']))
+        kb1 = PDKB(3, [1,2,3], list(map(Literal, ['p', 'q', 'r'])))
+        kb2 = IndexedPDKB(3, [1,2,3], list(map(Literal, ['p', 'q', 'r'])))
 
         test_consistency(kb1, kb2)
 
-    print "-- END TEST 9 --\n"
+    print("-- END TEST 9 --\n")
 
 def test10():
-    print "-- START TEST 10 --"
+    print("-- START TEST 10 --")
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system
-        kb1 = PDKB(3, [1,2,3,4], map(Literal, ['p', 'q', 'r']))
-        kb2 = IndexedPDKB(3, [1,2,3,4], map(Literal, ['p', 'q', 'r']))
+        kb1 = PDKB(3, [1,2,3,4], list(map(Literal, ['p', 'q', 'r'])))
+        kb2 = IndexedPDKB(3, [1,2,3,4], list(map(Literal, ['p', 'q', 'r'])))
 
         test_consistency_random_kb(kb1, kb2)
 
-    print "-- END TEST 10 --\n"
+    print("-- END TEST 10 --\n")
 
 def test11():
-    print "-- START TEST 11 --"
+    print("-- START TEST 11 --")
     # Test helper functions
     AxiomSystem.SYSTEM = KD
     p = Belief(2, Belief(1, Literal('p')))
@@ -273,14 +273,14 @@ def test11():
     assert Possible(2, Belief(4, neg(Literal('p')))) in sub
     assert Possible(2, Possible(3, neg(Literal('p')))) not in sub
 
-    print "-- END TEST 11 --\n"
+    print("-- END TEST 11 --\n")
 
 def test12():
-    print "-- START TEST 12 --"
+    print("-- START TEST 12 --")
 
     #kb1 = PDKB(3, [1,2,3], map(Literal, ['p', 'q', 'r']))
-    kb2 = IndexedPDKB(3, [1,2,3], map(Literal, ['p', 'q', 'r']))
-    kb3 = IndexedPDKB(3, [1,2,3], map(Literal, ['p', 'q', 'r']))
+    kb2 = IndexedPDKB(3, [1,2,3], list(map(Literal, ['p', 'q', 'r'])))
+    kb3 = IndexedPDKB(3, [1,2,3], list(map(Literal, ['p', 'q', 'r'])))
 
     l1 = Belief(1, Belief(2, Literal('p')))
     l2 = Possible(1, Belief(2, Literal('p')))
@@ -304,10 +304,10 @@ def test12():
     assert Possible(1, Possible(2, Literal('p'))) in fully_closed
     assert Possible(1, Literal('p')) in fully_closed
 
-    print "-- END TEST 12 --\n"
+    print("-- END TEST 12 --\n")
 
 def test13():
-    print "-- START TEST 13 --"
+    print("-- START TEST 13 --")
 
     AxiomSystem.SYSTEM = KD
     l1 = Belief(1, Belief(2, Literal('p')))
@@ -336,10 +336,10 @@ def test13():
     l2 = Possible(2, neg(Literal('r')))
     assert l1.kt_entails_rml(l2)
 
-    print "-- END TEST 13 --"
+    print("-- END TEST 13 --")
 
 def test14():
-    print "-- START TEST 14 --"
+    print("-- START TEST 14 --")
 
     for axiom_system in [KD, KT]:
         AxiomSystem.SYSTEM = axiom_system        
@@ -386,7 +386,7 @@ def test14():
         assert not b2p.inconsistent(Possible(3, neg(p))), ax_system()
         assert b2p.inconsistent(Possible(2, Belief(1, neg(p)))) == (axiom_system in [KT, S5]), ax_system()
 
-    print "-- END TEST 14 --"
+    print("-- END TEST 14 --")
 
 def ax_system():
     return "system = %s" % AxiomSystem.SYSTEM
@@ -545,11 +545,11 @@ def test_consistency_random_kb(pdkb, kb):
     assert isinstance(pdkb, PDKB)
 
     NUM_RUNS = 10000
-    fluents = map(Literal, 'pqrst')
+    fluents = list(map(Literal, 'pqrst'))
     agents = list(range(1, 4))
     added = []
     for i in range(0, NUM_RUNS):
-        print >> sys.stderr, str(i) + " ",
+        print(str(i) + " ", end=' ', file=sys.stderr)
         kb.reset()
         pdkb.reset()
         rmls = [
@@ -574,11 +574,11 @@ def test_consistency_random_kb(pdkb, kb):
                 pdkb_copy.restrict(rml)
                 kb.restrict(rml)
                 pdkb.restrict(rml)
-                print "before = " + str(kb_copy)
-                print "before = " + str(pdkb_copy)
-                print "\t add " + str(rmls)
-                print "\t after = " + str(kb)
-                print "\t after = " + str(pdkb)
+                print("before = " + str(kb_copy))
+                print("before = " + str(pdkb_copy))
+                print("\t add " + str(rmls))
+                print("\t after = " + str(kb))
+                print("\t after = " + str(pdkb))
                 sys.exit()
 
 def compare(pdkb, kb):
@@ -587,11 +587,11 @@ def compare(pdkb, kb):
     assert kb.is_consistent(), "%s\n%s" % (ax_system(), str(kb))
     for rml in pdkb.all_rmls:
         if kb.query(rml) != pdkb.query(rml):
-            print "#############################"
+            print("#############################")
             pdkb.restrict(rml)
             kb.restrict(rml)
-            print "RML conflict ax system %s on %s :\n\t %s is %s\n\t%s is %s" % (ax_system(), str(rml), str(pdkb), pdkb.query(rml), str(kb), kb.query(rml))
-            print "#############################"
+            print("RML conflict ax system %s on %s :\n\t %s is %s\n\t%s is %s" % (ax_system(), str(rml), str(pdkb), pdkb.query(rml), str(kb), kb.query(rml)))
+            print("#############################")
             return rml
 
 

@@ -133,7 +133,7 @@ class IndexedPDKB(KB):
             for rml1 in self.lookup[key]:
                 for rml2 in self.lookup[key]:
                     if rml1.inconsistent(rml2):
-                        print "inconsistent indexed_kb(%s, %s)" % (rml1, rml2)
+                        print("inconsistent indexed_kb(%s, %s)" % (rml1, rml2))
                         return False
         return True
 

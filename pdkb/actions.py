@@ -41,9 +41,9 @@ class Action(object):
 
     def applicable(self, state, agent=False):
         if DEBUG and not (self.pre.rmls <= state.rmls and 0 == len(self.npre.rmls & state.rmls)):
-            print "\nDEBUG: Action %s is not applicable" % self.name
-            print "Precondition:\n%s" % str(self.pre)
-            print "State:\n%s\n" % str(state)
+            print("\nDEBUG: Action %s is not applicable" % self.name)
+            print("Precondition:\n%s" % str(self.pre))
+            print("State:\n%s\n" % str(state))
         return (self.pre.rmls <= state.rmls) and (0 == len(self.npre.rmls & state.rmls))
 
     def possibly_applicable(self, state):
@@ -124,7 +124,7 @@ class Action(object):
         return (list(newposconds), list(newnegconds))
 
     def _project(self, effp, ag):
-        valid_effs = filter(lambda x: x.uniform(ag, self.akprops), effp)
+        valid_effs = [x for x in effp if x.uniform(ag, self.akprops)]
         projected_effs = [eff.project(ag, self.akprops) for eff in valid_effs]
         newposconds = []
         newnegconds = []
@@ -284,15 +284,15 @@ class CondEff(object):
 
 
 if __name__ == '__main__':
-    a = Action('foo', 2, [1,2], map(Literal, ['p', 'q',]), True)
+    a = Action('foo', 2, [1,2], list(map(Literal, ['p', 'q',])), True)
     a.add_pre(Belief(1, Literal('p')))
     a.add_pre(Belief(2, Literal('p')))
     a.new_nondet_effect()
-    p1 = PDKB(2, [1,2], map(Literal, ['p', 'q',]))
-    p2 = PDKB(2, [1,2], map(Literal, ['p', 'q',]))
-    p3 = PDKB(2, [1,2], map(Literal, ['p', 'q',]))
-    p4 = PDKB(2, [1,2], map(Literal, ['p', 'q',]))
-    pempty = PDKB(2, [1,2], map(Literal, ['p', 'q',]))
+    p1 = PDKB(2, [1,2], list(map(Literal, ['p', 'q',])))
+    p2 = PDKB(2, [1,2], list(map(Literal, ['p', 'q',])))
+    p3 = PDKB(2, [1,2], list(map(Literal, ['p', 'q',])))
+    p4 = PDKB(2, [1,2], list(map(Literal, ['p', 'q',])))
+    pempty = PDKB(2, [1,2], list(map(Literal, ['p', 'q',])))
     p1.add_rml(Belief(1, Literal('p')))
     p1.add_rml(Belief(1, Possible(2, neg(Literal('p')))))
     lit = Belief(2, Literal('q'))
@@ -306,35 +306,35 @@ if __name__ == '__main__':
     a.add_neg_effect(pempty, p1, lit)
     a.add_pos_effect(p1, pempty, lit)
 
-    print a.pddl()
-    print
+    print(a.pddl())
+    print()
 
     a.expand()
 
-    print a.pddl()
+    print(a.pddl())
 
     i = 0
 
     for (peff, neff) in a.effs:
-        print
-        print " -{ Non-det effect }-"
-        print "Positive"
+        print()
+        print(" -{ Non-det effect }-")
+        print("Positive")
         for condeff in peff:
             i += 1
-            print
-            print "%d: %s" % (i, condeff.reason_string())
-        print
-        print "Negative"
+            print()
+            print("%d: %s" % (i, condeff.reason_string()))
+        print()
+        print("Negative")
         for condeff in neff:
             i += 1
-            print
-            print "%d: %s" % (i, condeff.reason_string())
+            print()
+            print("%d: %s" % (i, condeff.reason_string()))
 
-    print
+    print()
 
     lit2 = Belief(2, Literal('q'))
-    print "%s --> %s" % (str(p1), str(lit2))
+    print("%s --> %s" % (str(p1), str(lit2)))
     from pdkb.ancillary.mutual_awareness import commonly_known_effect
     for ce in commonly_known_effect(CondEff(p1, pempty, lit2, False), [1,2], 3, 'pq', 'pos', True):
-        print ce[1].pddl()
-        print
+        print(ce[1].pddl())
+        print()

@@ -16,21 +16,21 @@ QUERIES_PER_PDKB = 10
 if 'small' == TYPE:
     AGENTS = (2,3)
     DEPTH = (2,3)
-    FLUENTS = map(Literal, 'pqr')
+    FLUENTS = list(map(Literal, 'pqr'))
     FLUENT_RANGE = (2,3)
     RMLS = (3,8)
 
 elif 'normal' == TYPE:
     AGENTS = (3,6)
     DEPTH = (4,7)
-    FLUENTS = map(Literal, 'pqrst')
+    FLUENTS = list(map(Literal, 'pqrst'))
     FLUENT_RANGE = (3,5)
     RMLS = (13,39)
 
 elif 'big' == TYPE:
     AGENTS = (3,10)
     DEPTH = (3,10)
-    FLUENTS = map(Literal, 'pqrstvwxyz')
+    FLUENTS = list(map(Literal, 'pqrstvwxyz'))
     FLUENT_RANGE = (5,10)
     RMLS = (50,150)
 
@@ -57,13 +57,13 @@ def doit():
             elif ag == skip_ag and dep < skip_dep:
                 continue
 
-            print
-            print "--------------"
-            print "   %d x %d" % (ag, dep)
-            print "--------------"
+            print()
+            print("--------------")
+            print("   %d x %d" % (ag, dep))
+            print("--------------")
             (times, sizes) = get_size_and_time(ag, dep, FLUENTS)
-            print
-            print "-------------------------"
+            print()
+            print("-------------------------")
 
             append_file('aamas.csv', "\n%d,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f" % (ag, dep, len(FLUENTS), sizes[0], sizes[1], sizes[2], times[0], times[1], times[2], times[3], times[4], times[5]))
 
@@ -84,7 +84,7 @@ def doit():
 
 def get_size_and_time(num_agents, depth, fluents):
 
-    agents = range(1, num_agents + 1)
+    agents = list(range(1, num_agents + 1))
 
     def generate_kbs():
         numRMLs = num_agents * depth * 2
@@ -191,7 +191,7 @@ def get_size_and_time(num_agents, depth, fluents):
             #           (len(kbs[i].agents), kbs[i].depth, len(kbs[i].props), len(kbs[i].rmls), len(closed_kbs[i].rmls), infs[i].size(), closed_kbs[i].size(), kbs[i].size(),
             #            inf_time[i], closure_time[i], inf_query, closed_query, unclosed_query, str(ans1)))
 
-    print "Performing random successful queries..."
+    print("Performing random successful queries...")
     times = [0.0,0.0,0.0,0.0,0.0,0.0]
     for i in range(NUM_PDKBS):
 
@@ -223,7 +223,7 @@ def get_size_and_time(num_agents, depth, fluents):
             #                inf_time[i], closure_time[i], inf_query, closed_query, unclosed_query, str(ans1)))
 
     sizes = [0.0, 0.0, 0.0]
-    print "Performing random unsuccessful queries..."
+    print("Performing random unsuccessful queries...")
     for i in range(NUM_PDKBS):
 
         (infs_kb, closed_kb, unclosed_kb) = generate_kbs()
@@ -272,7 +272,7 @@ def get_size_and_time(num_agents, depth, fluents):
     sizes[1] /= float(NUM_PDKBS)
     sizes[2] /= float(NUM_PDKBS)
 
-    print "\nDone!\n"
+    print("\nDone!\n")
 
     return (times, sizes)
 
@@ -318,9 +318,9 @@ def checkit(filename):
         ax = fig.add_subplot(111, projection='3d')
 
         if 'Query Time ($log_e(sec)$)' == zlabel or 'Update Time ($log_e(sec)$)' == zlabel:
-           print "za = " + str(zs0)
+           print("za = " + str(zs0))
            Z0 = np.log(zs0).reshape(X.shape)
-           print "Z0 = " + str(Z0)
+           print("Z0 = " + str(Z0))
            Z1 = np.log(zs1).reshape(X.shape)
            Z2 = np.log(zs2).reshape(X.shape)
         else:
@@ -358,13 +358,13 @@ def checkit(filename):
     col2 = '#d95f02'
     col3 = '#7570b3'
 
-    print "Plotting query time..."
+    print("Plotting query time...")
     plot_data(data, [6, 8, 7], ['INF', '$V_{RML}$', 'Closure'], [col1, col3, col2], 'Query Time ($log_e(sec)$)', 'time.eps')
 
-    print "Plotting size..."
+    print("Plotting size...")
     plot_data(data, [4, 3, 5], ['Closure', 'INF', '$V_{RML}$'], [col2, col1, col3], 'Size (x1000)', 'size.eps')
 
-    print "Plotting update time..."
+    print("Plotting update time...")
     plot_data(data, [9, 11, 10], ['INF', '$V_{RML}$', 'Closure'], [col1, col3, col2], 'Update Time ($log_e(sec)$)', 'update_time.eps')
 
 

@@ -107,7 +107,7 @@ def convert_action(action, depth, agents, props, akprops):
 
 def parse_problem(prob, domain):
 
-    assert prob.task in PROBLEM_TYPES.keys(), "Error: Bad problem type: %s" % prob_type
+    assert prob.task in list(PROBLEM_TYPES.keys()), "Error: Bad problem type: %s" % prob_type
 
     return PROBLEM_TYPES[prob.task](prob, domain)
 
@@ -136,9 +136,9 @@ def read_pdkbddl_file(fname):
             lines = lines[:index] + read_pdkbddl_file(new_file) + lines[index+1:]
 
     # Strip out the comments and empty lines
-    lines = filter(lambda x: x != '', lines)
-    lines = filter(lambda x: x[0] != ';', lines)
-    lines = map(lambda x: x.split(';')[0], lines)
+    lines = [x for x in lines if x != '']
+    lines = [x for x in lines if x[0] != ';']
+    lines = [x.split(';')[0] for x in lines]
 
     # Convert the [] and <> notation to nested B's
     def replace_modal(left, right, sym, line):
@@ -179,7 +179,7 @@ def read_pdkbddl_file(fname):
         return replace_modal('&', '%', 'AK', line.replace('{AK}','&%'))
 
     for func in [replace_belief, replace_possible, replace_alwaysknow]:
-        lines = map(func, lines)
+        lines = list(map(func, lines))
 
     return lines
 
@@ -197,8 +197,8 @@ def parse_pdkbddl(pdkbddl_file):
 
     prob = GroundProblem(lines[:prob_index], lines[prob_index:])
 
-    fluents = filter(lambda x: not x.always_known, prob.fluents)
-    akfluents = filter(lambda x: x.always_known, prob.fluents)
+    fluents = [x for x in prob.fluents if not x.always_known]
+    akfluents = [x for x in prob.fluents if x.always_known]
 
     props = [parse_rml('_'.join(str(p)[1:-1].split())) for p in fluents]
     akprops = [parse_rml('_'.join(str(p)[1:-1].split())) for p in akfluents]
@@ -309,7 +309,7 @@ class ValidGeneration(Problem):
 
     def solve(self):
 
-        print "\n\nCond effs (orig): %d (%d)" % (self.comp_cond_count, self.orig_cond_count)
+        print("\n\nCond effs (orig): %d (%d)" % (self.comp_cond_count, self.orig_cond_count))
 
         # Write the pddl files
         write_file('pdkb-domain.pddl', self.domain.pddl())
@@ -332,10 +332,10 @@ class ValidGeneration(Problem):
 
 
     def output_solution(self):
-        print "\n  --{ Plan }--\n"
+        print("\n  --{ Plan }--\n")
         index = 1
         for a in self.plan.actions:
-            print "%d. %s" % (index, str(a))
+            print("%d. %s" % (index, str(a)))
             index += 1
 
     def pddl(self):
@@ -416,34 +416,34 @@ class ValidAssessment(Problem):
             self.goal_holds = False
 
     def output_solution(self, relevant=True):
-        print
-        print "Assessed the following plan:"
-        print "\n".join(self.actions)
+        print()
+        print("Assessed the following plan:")
+        print("\n".join(self.actions))
 
-        print
-        print "Executable: %s" % str(self.executable)
-        print "Goal holds: %s" % str(self.goal_holds)
+        print()
+        print("Executable: %s" % str(self.executable))
+        print("Goal holds: %s" % str(self.goal_holds))
 
         if not self.executable:
-            print "First failed action: %s" % self.first_fail
-            print "\nFailed state:"
+            print("First failed action: %s" % self.first_fail)
+            print("\nFailed state:")
             if relevant:
-                print self.failed_state.relevant_output()
+                print(self.failed_state.relevant_output())
             else:
-                print self.failed_state
+                print(self.failed_state)
 
         if self.final_state:
-            print "\nFinal state:"
+            print("\nFinal state:")
             if relevant:
-                print self.final_state.relevant_output()
+                print(self.final_state.relevant_output())
             else:
-                print self.final_state
+                print(self.final_state)
 
             if not self.goal_holds:
-                print "\nMissing RMLs from goal:"
-                print self.goal_violation
+                print("\nMissing RMLs from goal:")
+                print(self.goal_violation)
 
-        print
+        print()
 
 
 class PlausibleGeneration(Problem):
@@ -491,11 +491,11 @@ class Domain:
         PROPS = pdkb.all_rmls | akpdkb.all_rmls
         assert 0 == len(pdkb.all_rmls & akpdkb.all_rmls), "Error: Detected overlap in regular fluents and always known fluents"
 
-        print "\n\n# Agents: %d" % len(self.agents)
-        print "# Props: %d" % len(PROPS)
-        print "# Acts: %d" % len(self.actions)
-        print "# Effs: %d" % sum([a.num_effs() for a in self.actions])
-        print "Depth: %d" % self.depth
+        print("\n\n# Agents: %d" % len(self.agents))
+        print("# Props: %d" % len(PROPS))
+        print("# Acts: %d" % len(self.actions))
+        print("# Effs: %d" % sum([a.num_effs() for a in self.actions]))
+        print("Depth: %d" % self.depth)
 
         for (key, rml) in sorted([(str(r), r) for r in PROPS]):
             to_ret += "        (%s)\n" % rml.pddl()
