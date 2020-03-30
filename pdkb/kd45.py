@@ -53,63 +53,80 @@ class PDKB(KB):
         return self._all_rmls
 
     def add_rml(self, rml):
+        """Adds a single RML. No closure."""
         assert isinstance(rml, RML)
         self.rmls.add(rml)
 
     def remove_rml(self, rml):
+        """Removes a single RML. No inverted closure."""
         assert isinstance(rml, RML)
         self.rmls.remove(rml)
 
     def expand(self, rmls):
+        """Adds a set of RMLs and their implications."""
         assert all(isinstance(rml, RML) for rml in rmls)
         to_add = closure_set_of_rmls(rmls)
         self.rmls |= to_add
 
     def contract(self, rmls):
+        """Removes a set of RMLs. No inverted closure."""
         assert all(isinstance(rml, RML) for rml in rmls)
         self.rmls -= rmls
 
-    # Remove set of RMLs and anything that implies them.
     def remove(self, rmls):
+        """Removes a set of RMLs and everything that implies them."""
         assert all(isinstance(rml, RML) for rml in rmls)
-        to_remove = set([rml for rml in self.rmls if any (rml.entails_rml(removal) for removal in rmls)])
+        to_remove = set()
+        for rml in self.rmls:
+            for rml2 in rmls:
+                if rml.entails(rml2):
+                    to_remove(rml)
         self.contract(to_remove)
 
-    # Add a new set of RMLs, removing any RMLs that contradict
     def update(self, rmls):
+        """Add a new set of RMLs, removing any RMLs that contradict"""
         assert all(isinstance(rml, RML) for rml in rmls)
         #negated_rmls = negate_set_of_rmls(rmls)
-        to_remove = {rml for rml in self.rmls if any(newrml.inconsistent(rml) for newrml in rmls)}
+        to_remove = set()
+        for rml in self.rmls:
+            for newrml in rmls:
+                if newrml.inconsistent(rml):
+                    to_remove.add(rml)
         self.remove(to_remove)
         self.expand(rmls)
 
     def query(self, rml):
+        """Simply checks if an RML is in the KB"""
         # pre: knowledge base is closed
         assert isinstance(rml, RML)
         return rml in self.rmls
 
     def logically_reduce(self):
+        """Performs the logical reduction on the KB (which is unique)"""
         to_remove = set()
         for rml in self.rmls:
             to_remove |= (set(kd_closure(rml)) - set([rml]))
         self.rmls -= to_remove
 
     def logically_close(self):
+        """Performs the KD45 closure on all RMLs in the KB"""
         new_rmls = set()
         for rml in self.rmls:
             new_rmls |= set(kd_closure(rml))
         self.rmls |= new_rmls
 
     def close_omniscience(self):
+        """Puts the KB into a form that everything is either believed or it's negation is."""
         for rml in self.all_rmls:
             if isinstance(rml, Possible) and neg(rml) not in self.rmls:
                 self.add_rml(rml)
 
     def merge_modalities(self):
+        """Collapses neighbouring modalities of the same agent on all RMLs in the KB."""
         self.rmls = set([rml.merge_modalities() for rml in self.rmls])
 
-    def perspectival_view(self, allow_repeat=False):
-
+    def perspectival_view(self, allow_repeat=False, root_agent=0):
+        """Returns the set of RMLs from the perspective of the root agent."""
         def no_repeats(rml):
             if rml.is_lit():
                 return True
@@ -126,29 +143,24 @@ class PDKB(KB):
         CW = set()
         for rml in all_rmls:
             if rml in self.rmls:
-                CW.add(Belief(0, rml))
+                CW.add(Belief(root_agent, rml))
             else:
-                CW.add(Possible(0, neg(rml)))
+                CW.add(Possible(root_agent, neg(rml)))
         return CW
 
     def is_consistent(self):
-        # Check if there is anything obviously inconsistent
+        """Checks to see if there is anything obviously inconsistent"""
         for rml in self.rmls:
             if neg(rml) in self.rmls:
-                for r in self.rmls:
-                    if r == neg(rml):
-                        #print "%s <=/=> %s" % (rml, r)
-                        pass
                 return False
-
         return True
 
     def is_omniscient(self):
+        """Checks to see if the KB is omniscient (i.e., everything or its negation is believed)"""
         for rml in self.all_rmls:
             if (rml not in self.rmls) and (neg(rml) not in self.rmls):
                 return False
         return True
-
 
 
     # Debugging tool: restrict kb to only those that share the same literal as rml
@@ -157,11 +169,10 @@ class PDKB(KB):
         for rml2 in self.rmls:
             if not rml.literal == rml2.literal:
                 to_remove.append(rml2)
-        for item in to_remove:
-            self.rmls.remove(item)
+        self.contract(to_remove)
 
     def generate_kripke(self, compressed = False, debug = False):
-
+        """Generate the kripke structure of the KB"""
         if debug:
             prefix = ' '
         else:
@@ -295,6 +306,11 @@ class PDKB(KB):
         return all_new_worlds
 
     def relevant_output(self):
+        """
+        Computes the unique information of the KB.
+        
+        Ignores disjunctive trivial belief like every agent either believes something or they don't.
+        """
         newRMLs = set()
         for rml in self.rmls:
             if not isinstance(rml, Possible):
@@ -318,6 +334,7 @@ class PDKB(KB):
 ####################
 
 def closure(rml):
+    """Computes the set of RMLs in the closure of a single RML"""
     assert isinstance(rml, RML)
 
     to_ret = set([rml])
@@ -329,8 +346,8 @@ def closure(rml):
 
     return to_ret
 
-# Closure of the D axiom: Belief(phi) ==> Diamond(phi)
 def kd_closure(rml):
+    """Closure of the D axiom: Belief(phi) ==> Diamond(phi)"""
     assert isinstance(rml, RML)
 
     if isinstance(rml, Literal):
@@ -341,8 +358,8 @@ def kd_closure(rml):
     else:
         return [Possible(rml.agent, newrml) for newrml in kd_closure(rml.rml)]
 
-# Closure of the T axiom: Belief(phi) ==> phi
 def kt_closure(rml):
+    """Closure of the T axiom: Belief(phi) ==> phi"""
     assert isinstance(rml, RML)
 
     if isinstance(rml, Belief):
@@ -365,9 +382,6 @@ def closure_set_of_rmls(rmls):
         rmls_closure |= set(closure(rml))
     return rmls_closure
 
-def kd_closure_set_of_rmls(rmls):
-    return closure_set_of_rmls(rmls, kd_closure)
-
 def generate_all_worlds(props):
     props = list(props)
     worlds = set()
@@ -379,12 +393,13 @@ def generate_all_worlds(props):
 
 def filter_agent(rmls, ag):
     def projectable(rml):
-        return not rml.is_lit() and ag == rml.agent
+        return (not rml.is_lit()) and (ag == rml.agent)
     return set(filter(projectable, rmls))
 
 
 def project(rmls, ag):
-    return set([rml.rml for rml in filter_agent([x for x in rmls if isinstance(x, Belief)], ag)])
+    belief_rmls = [x for x in rmls if isinstance(x, Belief)]
+    return set([rml.rml for rml in filter_agent(belief_rmls, ag)])
 
 CLOSURE = dict([(KD, [kd_closure]),
                 (KT, [kt_closure, kd_closure]),
