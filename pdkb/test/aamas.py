@@ -93,6 +93,7 @@ def get_size_and_time(num_agents, depth, fluents):
             next_rml = random_rml(depth, agents, fluents)
             if not closed_kb.query(neg(next_rml)):
                 closed_kb.add_rml(next_rml)
+                closed_kb.logically_close()
                 indexed_kb.expand(set([next_rml]))
                 count += 1
 
