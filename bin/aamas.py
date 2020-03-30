@@ -1,6 +1,8 @@
 
 import sys, os
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from pdkb.test.aamas import doit, checkit
 
 if __name__ == '__main__':

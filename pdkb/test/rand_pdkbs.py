@@ -12,8 +12,6 @@ from pdkb.axiom_systems import AxiomSystem
 
 from pdkb.test.utils import random_rml, random_pdkb, parse_test_pdkb, test_kripke
 
-from krrt.utils import read_file, write_file, get_file_list
-
 
 def test0():
     test_files = get_file_list('examples/', match_list=['.pdkb'])

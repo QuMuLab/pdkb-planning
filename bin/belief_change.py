@@ -1,6 +1,8 @@
 
 import sys, os
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from pdkb.test.belief_change import doit, checkit
 
 from pdkb.axiom_systems import AxiomSystem, KD, KT

@@ -1,15 +1,13 @@
 
 import sys, random, time
 
-from krrt.utils import write_file, append_file, load_CSV
-
 from pdkb.kd45 import *
 from pdkb.indexed_kd45 import *
 from pdkb.pinf import *
 from pdkb.rml import *
-from pdkb.test.utils import random_pdkb, random_rml
+from pdkb.test.utils import random_pdkb, random_rml, write_file, append_file, load_CSV
 
-TYPE = 'big'
+TYPE = 'small'
 NUM_PDKBS = 30
 QUERIES_PER_PDKB = 30
 

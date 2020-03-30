@@ -1,6 +1,8 @@
 
 import sys, os
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from pdkb.test.rand_pdkbs import test0, test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14
 from pdkb.test.utils import parse_test_pdkb, test_random_pdkb
 

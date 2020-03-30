@@ -1,8 +1,6 @@
 
 import random, os
 
-from krrt.utils import read_file, write_file, get_file_list
-
 from pdkb.kd45 import PDKB, kd_closure
 from pdkb.rml import neg, Belief, Possible, Literal
 
@@ -158,3 +156,37 @@ def test_kripke(kb, rmls):
                 print("  %s" % str(rml))
 
     print()
+
+def write_file(fn, lines, mode='w'):
+    if list == type(lines):
+        lines = '\n'.join(lines)
+    with open(fn, mode) as f:
+        f.write(lines)
+
+def append_file(fn, lines):
+    write_file(fn, lines, 'a+')
+
+def read_file(fn):
+    lines = []
+    with open(fn, 'r') as f:
+        lines = f.readlines()
+    return lines
+
+def load_CSV(filename, delimiter = ','):
+    """Load a csv file into a list of value arrays"""
+    file_lines = read_file(filename)
+    return [line.split(delimiter) for line in file_lines]
+
+def save_CSV(data, filename, delimiter = ','):
+    """
+    Save a matrix of data as a csv file.
+    
+    data:        Array of arrays. Each element will be converted to a string
+    filename:    Filename of the csv file to be created
+    delimiter:   Optional parameter to specify the separator used
+    """
+    output = ''
+    for line in data:
+        output += delimiter.join([str(item) for item in line]) + "\n"
+    
+    write_file(filename, output)
