@@ -53,14 +53,12 @@ class PDKB(KB):
         return self._all_rmls
 
     def add_rml(self, rml):
-        """Adds a single RML. No closure."""
-        assert isinstance(rml, RML)
-        self.rmls.add(rml)
+        """Adds a single RML."""
+        self.expand([rml])
 
     def remove_rml(self, rml):
-        """Removes a single RML. No inverted closure."""
-        assert isinstance(rml, RML)
-        self.rmls.remove(rml)
+        """Removes a single RML."""
+        self.remove([rml])
 
     def expand(self, rmls):
         """Adds a set of RMLs and their implications."""
@@ -79,8 +77,8 @@ class PDKB(KB):
         to_remove = set()
         for rml in self.rmls:
             for rml2 in rmls:
-                if rml.entails(rml2):
-                    to_remove(rml)
+                if rml.entails_rml(rml2):
+                    to_remove.add(rml)
         self.contract(to_remove)
 
     def update(self, rmls):
@@ -105,15 +103,12 @@ class PDKB(KB):
         """Performs the logical reduction on the KB (which is unique)"""
         to_remove = set()
         for rml in self.rmls:
-            to_remove |= (set(kd_closure(rml)) - set([rml]))
+            to_remove |= (set(closure(rml)) - set([rml]))
         self.rmls -= to_remove
 
     def logically_close(self):
-        """Performs the KD45 closure on all RMLs in the KB"""
-        new_rmls = set()
-        for rml in self.rmls:
-            new_rmls |= set(kd_closure(rml))
-        self.rmls |= new_rmls
+        """Performs the closure on all RMLs in the KB"""
+        self.rmls |= closure_set_of_rmls(self.rmls)
 
     def close_omniscience(self):
         """Puts the KB into a form that everything is either believed or it's negation is."""
