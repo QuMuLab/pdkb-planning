@@ -9,4 +9,3 @@ Eventually, more documentation will be added to the project, but feel free to [c
 * [Graphviz](http://graphviz.org/)
 * [NetworkX](http://networkx.github.io/)
 * [Pygraphviz](http://networkx.lanl.gov/pygraphviz/index.html)
-* [KR Toolkit](https://bitbucket.org/haz/krtoolkit/wiki/Home)
