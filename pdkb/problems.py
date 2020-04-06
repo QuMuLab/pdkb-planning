@@ -131,7 +131,7 @@ def read_pdkbddl_file(fname):
                 found = True
 
         for index in reversed(include_indices):
-            new_file = '/'.join(fname.split('/')[:-1]) + '/' + lines[index].split(':')[1][:-1]
+            new_file = os.path.join(os.path.split(fname)[0], lines[index].split(':')[1][:-1])
             lines = lines[:index] + read_pdkbddl_file(new_file) + lines[index+1:]
 
     # Strip out the comments and empty lines
