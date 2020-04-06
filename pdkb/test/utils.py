@@ -169,7 +169,7 @@ def append_file(fn, lines):
 def read_file(fn):
     lines = []
     with open(fn, 'r') as f:
-        lines = f.readlines()
+        lines = [line.strip() for line in f.readlines()]
     return lines
 
 def load_CSV(filename, delimiter = ','):
@@ -258,7 +258,7 @@ def parse_output_ipc(file_name):
 
     # Get the plan
     with open(file_name, 'r') as f:
-        action_list = f.readlines()
+        action_list = [line.strip() for line in f.readlines()]
 
     actions = [Action(line[1:-1].strip(' ').lower()) for line in action_list]
 
