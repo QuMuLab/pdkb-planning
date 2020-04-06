@@ -37,7 +37,8 @@ def solve(pdkbddl_file):
         print("done! (from cache)")
     else:
         problem.preprocess()
-        pickle.dump(problem, open(fname, 'w'), 2)
+        with open(fname, 'wb') as f:
+            pickle.dump(problem, f, 2)
         print("done!")
 
     print("Solving problem...", end=' ')
