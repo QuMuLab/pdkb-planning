@@ -1,8 +1,7 @@
 
 import os
 
-from krrt.utils import read_file, write_file, run_command
-from krrt.planning import parse_output_FF, parse_output_ipc
+from pdkb.test.utils import read_file, write_file, run_command, parse_output_ipc
 
 from pdkb.rml import parse_rml, Literal
 from pdkb.kd45 import PDKB, project
@@ -320,15 +319,9 @@ class ValidGeneration(Problem):
         chosen_planner = 'siw-then-bfsf' # Can use bfs_f, siw, or siw-then-bfsf
         run_command("%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt" % (planner_path, chosen_planner),
                     output_file = 'pdkb-plan.out',
-                    MEMLIMIT = 2000,
-                    TIMELIMIT = 1800)
+                    MEMLIMIT = "2000000",
+                    TIMELIMIT = "1800")
         self.plan = parse_output_ipc('pdkb-plan.txt')
-
-        #run_command("%s/planners/ff -o pdkb-domain.pddl -f pdkb-problem.pddl" % planner_path,
-        #            output_file = 'pdkb-plan.txt',
-        #            MEMLIMIT = 1000,
-        #            TIMELIMIT = 1800)
-        #self.plan = parse_output_FF('pdkb-plan.txt')
 
 
     def output_solution(self):
