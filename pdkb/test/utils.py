@@ -190,3 +190,22 @@ def save_CSV(data, filename, delimiter = ','):
         output += delimiter.join([str(item) for item in line]) + "\n"
     
     write_file(filename, output)
+
+def get_file_list(dir_name, forbidden_list = None, match_list = None):
+    import os
+    
+    forbidden_patterns = ['.svn']
+    
+    file_list = [os.path.join(dir_name, item) for item in os.listdir(dir_name)]
+    
+    if forbidden_list:
+        forbidden_patterns.extend(forbidden_list)
+    
+    for item in forbidden_patterns:
+        file_list = filter(lambda x: item not in x, file_list)
+    
+    if match_list:
+        for match_item in match_list:
+            file_list = filter(lambda x:match_item in x, file_list)
+    
+    return file_list
