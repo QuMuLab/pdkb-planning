@@ -1,5 +1,5 @@
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 #maintainer information
 LABEL maintainer="Christian Muise (christian.muise@queensu.ca)"
