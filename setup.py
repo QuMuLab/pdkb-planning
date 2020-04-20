@@ -9,5 +9,6 @@ setup(name = 'PDKB Planning Library',
       author_email = 'christian.muise@gmail.com',
       url = 'https://github.com/QuMuLab/pdkb-planning',
       packages = find_packages(),
+      include_package_data=True,
      )
 
