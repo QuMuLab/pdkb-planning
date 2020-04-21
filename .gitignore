@@ -133,3 +133,9 @@ dmypy.json
 *.csv
 
 .problem-cache/
+
+pdkb-domain.pddl
+
+pdkb-plan.out
+
+pdkb-problem.pddl
