@@ -589,7 +589,9 @@ class Problem(object):
             return handle_modality(node, 3, '!B')
 
         elif "!" == node.name[0]:
-            pred = Primitive(self.to_predicate(PDDL_Tree(node.name[1:]), map=parameter_map))
+            pred_tree = PDDL_Tree(node.name[1:])
+            pred_tree.children = node.children
+            pred = Primitive(self.to_predicate(pred_tree, map=parameter_map))
             pred.negated_rml = True
             return pred
         else:
