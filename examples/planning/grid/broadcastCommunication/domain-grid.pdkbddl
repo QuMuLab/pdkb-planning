@@ -1,0 +1,50 @@
+(define (domain grid)
+
+    (:agents a b c)
+    (:types pos survivor)
+    (:constants)
+    (:predicates
+       {AK}(at ?ag - agent ?p - pos)
+       {AK}(succ ?p1 - pos ?p2 - pos)
+           (survivorat ?s - survivor ?p - pos)
+           (hiddensurvivorat ?s - survivor ?p - pos)
+           (checked ?p - pos)
+       {AK}(leader ?ag - agent)
+           ;(obs ?p - pos)       -- to force planner to communicate (communicating all baseline)
+
+
+       
+    ) 
+           
+    
+   (:action move
+        :derive-condition   always
+        :parameters         (?ag - agent ?p1 - pos ?p2 - pos)
+        :precondition       (and (at ?ag ?p1) (succ ?p1 ?p2) (not(leader ?ag)))
+        :effect             (and (at ?ag ?p2) (!at ?ag ?p1))
+    )
+    
+
+
+    
+    (:action observe
+       :derive-condition   always
+       :parameters         (?ag - agent ?p - pos ?s - survivor)
+       :precondition       (and(at ?ag ?p) (not(leader ?ag))) 
+       :effect             (and(when (hiddensurvivorat ?s ?p) [?ag](survivorat ?s ?p)) 
+                               (when (!hiddensurvivorat ?s ?p) [?ag](!survivorat ?s ?p))
+                               (checked ?p))
+                                
+    )
+
+   
+    (:action comm
+      :derive-condition   always
+      :parameters         (?p1 - pos ?ag ?g2 - agent  ?s - survivor)
+      :precondition       (and (at ?ag ?p1) [?ag](survivorat ?s ?p1) (leader ?g2)) 
+      :effect             (and [?g2](survivorat ?s ?p1)
+                               ;(obs ?p1)
+                          )
+    ) 
+    
+)

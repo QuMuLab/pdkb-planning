@@ -1,0 +1,75 @@
+
+{include:domain-grid.pdkbddl}
+
+
+(define (problem prob1)
+  (:domain bw4t)
+ 
+ (:objects   
+		   blue red - color 
+		   1 2 - id 
+		   roomc1 roomc2 roomc3 dropzone - room
+                   frontdropzone righthalld lefthalld - place
+		   frontroomc1 frontroomc2 frontroomc3 lefthallc righthallc - place
+ )
+
+ (:projection )
+ (:depth 1)
+ (:task valid_generation)
+ (:init-type complete)
+ (:init 	
+
+
+	(connected roomc1 frontroomc1) (connected frontroomc1 roomc1)
+        (connected frontroomc1 frontroomc2) (connected frontroomc2 frontroomc1)
+        (connected frontroomc1 lefthallc) (connected lefthallc frontroomc1)
+		
+	(connected roomc2 frontroomc2) (connected frontroomc2 roomc2)
+        (connected frontroomc1 frontroomc2) (connected frontroomc2 frontroomc1)
+	(connected frontroomc2 frontroomc3) (connected frontroomc3 frontroomc2)
+		
+	(connected roomc3 frontroomc3) (connected frontroomc3 roomc3)  
+	(connected frontroomc3 righthallc) (connected righthallc frontroomc3)
+
+        (connected dropzone frontdropzone) (connected frontdropzone dropzone) 
+        (connected frontdropzone lefthalld) (connected frontdropzone righthalld)
+         (connected lefthalld frontdropzone) (connected righthalld frontdropzone)
+
+        (connected lefthallc lefthalld ) (connected lefthalld lefthallc) 
+	(connected righthallc righthalld) (connected righthalld righthallc)
+
+	 
+
+		 
+                (at a lefthallc) (at b righthallc) (at c righthallc)
+                
+                
+                  (hiddenblock blue 1 roomc3)  
+                  (hiddenblock blue 2 roomc2)  
+
+                               (hiddenblock red 2 roomc2)   
+
+                (hiddenblockedcell roomc1)
+		(droplocation dropzone)
+		(handempty)
+
+ )
+
+
+ (:goal      
+
+
+             (obs blue 1 roomc3) (obs blue 2 roomc2)
+            (obss roomc2) (obss roomc3)
+             
+
+                (blockin blue 1 dropzone)  
+                (blockin blue 2 dropzone) 
+
+
+             (checked roomc2) (checked roomc3)
+           
+
+             (check roomc1) (check roomc2) (check roomc3)        
+             
+ ))
