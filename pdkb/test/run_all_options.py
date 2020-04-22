@@ -21,9 +21,12 @@ domains = [
 ]
 
 valid_file_names = ['prob1', 'prob2', 'prob3', 'prob4',
-                    'prob-depth1', 'prob-depth2','prob-depth3',
                     'prob-paper1',  'prob-paper2',  'prob-paper3',
                     'problem', 'problem-single']
+
+valid_file_names += ["prob_%d_%d" % (num_depth, num_ag) \
+                        for num_depth in [1,3,5] \
+                        for num_ag in [3,7]]
 
 commands = [
     ('module', "python3 -m pdkb.planner {} --keep-files"),

@@ -1,6 +1,4 @@
 
-{include:dom-agents3.pdkbddl}
-;{include:dom-agents7.pdkbddl}
 
 (define (problem prob-depth1)
 
