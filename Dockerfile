@@ -27,8 +27,8 @@ RUN mkdir /MEP
 WORKDIR /MEP
 RUN git clone https://github.com/QuMuLab/pdkb-planning.git
 WORKDIR /MEP/pdkb-planning
+RUN chmod 777 pdkb/planners/*
 RUN python3 setup.py install
-RUN chmod 777 /usr/local/lib/python3.6/dist-packages/PDKB_Planning_Library-0.1-py3.6.egg/pdkb/planners/*
 
 WORKDIR /MEP
 
