@@ -1,0 +1,36 @@
+
+{include:domain-3ag.pdkbddl}
+
+(define (problem prob2)
+
+    (:domain grapevine)
+
+    (:objects l1 l2 - loc)
+
+    (:projection )
+    (:depth 1)
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+
+        (connected l1 l2)
+        (connected l2 l1)
+
+        (forall ?ag - agent (at ?ag l1))
+
+        (forall ?ag - agent
+            [?ag](secret ?ag))
+    )
+
+    (:goal
+        [a](secret b)
+        [b](secret c)
+        [c](secret d)
+        [d](secret a)
+       ![a](secret d)
+       ![b](secret a)
+       ![c](secret b)
+       ![d](secret c)
+    )
+)
