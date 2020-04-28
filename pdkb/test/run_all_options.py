@@ -9,6 +9,7 @@ domains = [
     'examples/planning/bw4t/blockedCells',
 
     'examples/planning/corridor',
+    'examples/planning/corridor-doxastic',
     'examples/planning/grapevine',
     'examples/planning/thief/prob-paper1.pdkbddl',
     'examples/planning/hattari/problem.pdkbddl',
