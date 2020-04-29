@@ -1,0 +1,16 @@
+
+{include:domain-4ag.pdkbddl}
+
+(define (problem prob-4ag-4g-1d)
+
+    {include:problem-setup.pdkbddl}
+
+    (:depth 1)
+
+    (:goal
+        [b](secret a)
+        [c](!secret a)
+        [b](!secret d)
+        [c](secret d)
+    )
+)
