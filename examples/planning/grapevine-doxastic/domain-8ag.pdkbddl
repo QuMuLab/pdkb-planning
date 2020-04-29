@@ -1,7 +1,7 @@
 
 (define (domain grapevine)
 
-    (:agents a b c)
+    (:agents a b c d e f g h)
 
     {include:domain.pdkbddl}
     

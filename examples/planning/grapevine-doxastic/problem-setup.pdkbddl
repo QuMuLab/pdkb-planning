@@ -1,0 +1,20 @@
+
+
+    (:domain grapevine)
+
+    (:objects l1 l2 - loc)
+
+    (:projection )
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+
+        (connected l1 l2)
+        (connected l2 l1)
+
+        (forall ?ag - agent (at ?ag l1))
+
+        (forall ?ag - agent
+            [?ag](secret ?ag))
+    )
