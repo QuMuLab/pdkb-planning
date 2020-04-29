@@ -25,3 +25,14 @@
                                          [?a2](secret ?as)))
                             )
     )
+
+    (:action fib
+        :derive-condition   (at $agent$ ?l)
+        :parameters         (?a ?as - agent ?l - loc)
+        :precondition       (and (at ?a ?l) [?a](secret ?as))
+        :effect             (and
+                                (forall ?a2 - agent
+                                    (when     (at ?a2 ?l)
+                                         [?a2](!secret ?as)))
+                            )
+    )
