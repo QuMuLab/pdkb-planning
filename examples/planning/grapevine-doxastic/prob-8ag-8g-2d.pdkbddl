@@ -20,8 +20,10 @@
 
         (forall ?ag - agent (at ?ag l1))
 
-        (forall ?ag1 - agent ?ag2 - agent ?s - agent
-            [?ag1]<?ag2>(secret ?s))
+        (forall ?ag1 - agent
+          (forall ?ag2 - agent
+            (forall ?s - agent
+                [?ag1]<?ag2>(secret ?s))))
 
         (forall ?ag - agent
             [?ag](secret ?ag))
