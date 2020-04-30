@@ -3,7 +3,29 @@
 
 (define (problem prob-8ag-8g-2d)
 
-    {include:problem-setup.pdkbddl}
+    (:domain grapevine)
+
+    (:objects l1 l2 l3 - loc)
+
+    (:projection )
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+
+        (connected l1 l2)
+        (connected l2 l1)
+        (connected l2 l3)
+        (connected l3 l2)
+
+        (forall ?ag - agent (at ?ag l1))
+
+        (forall ?ag1 - agent ?ag2 - agent ?s - agent
+            [?ag1]<?ag2>(secret ?s))
+
+        (forall ?ag - agent
+            [?ag](secret ?ag))
+    )
 
     (:depth 2)
 
