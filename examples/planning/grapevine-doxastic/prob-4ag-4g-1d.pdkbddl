@@ -3,7 +3,7 @@
 
 (define (problem prob-4ag-4g-1d)
 
-    {include:problem-setup.pdkbddl}
+    {include:problem-setup-1d.pdkbddl}
 
     (:depth 1)
 

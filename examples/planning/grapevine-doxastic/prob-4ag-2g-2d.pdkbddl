@@ -3,12 +3,12 @@
 
 (define (problem prob-4ag-2g-2d)
 
-    {include:problem-setup.pdkbddl}
+    {include:problem-setup-2d.pdkbddl}
 
     (:depth 2)
 
     (:goal
-        [b](secret a)
-        [c](!secret a)
+        [b][c](!secret a)
+        [c](secret a)
     )
 )

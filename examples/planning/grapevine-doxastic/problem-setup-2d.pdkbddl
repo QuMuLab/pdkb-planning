@@ -1,0 +1,40 @@
+
+
+    (:domain grapevine)
+
+    (:objects l1 l2 l3 - loc)
+
+    (:projection )
+    (:task valid_generation)
+
+    (:init-type complete)
+        (:init
+
+        ; Map
+        (connected l1 l2)
+        (connected l2 l1)
+        (connected l2 l3)
+        (connected l3 l2)
+
+        ; Agents all in l1
+        (forall ?ag - agent (at ?ag l1))
+
+        ; Agents all believe others think secrets are possible
+        (forall ?ag1 - agent
+          (forall ?ag2 - agent
+            (forall ?s - agent
+                (and
+                  [?ag1]<?ag2>(secret ?s)
+                  [?ag1]<?ag2>(!secret ?s)
+                ))))
+
+        ; Either the agents start with their own secrets known, or we initialize that info
+        ;  - The latter is required when we are in a depth-2 nesting to get the proper configuration
+        ;    of nested belief.
+
+        ; Agents believe their own secret
+        ;(forall ?ag - agent
+        ;    [?ag](secret ?ag))
+        ;
+        ; (initialized)
+    )
