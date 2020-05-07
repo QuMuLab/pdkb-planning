@@ -38,7 +38,7 @@
                             )
     )
 
-    (:action initialized
+    (:action initialize
         :derive-condition   never
         :precondition       (and)
         :effect             (and

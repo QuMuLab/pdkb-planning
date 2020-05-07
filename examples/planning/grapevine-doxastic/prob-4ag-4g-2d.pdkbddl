@@ -8,9 +8,9 @@
     (:depth 2)
 
     (:goal
+        [b][c](!secret a)
+        [c](secret a)
         [b](secret a)
-        [c](!secret a)
-        [b](!secret d)
-        [c](secret d)
+        [d][c](secret a)
     )
 )
