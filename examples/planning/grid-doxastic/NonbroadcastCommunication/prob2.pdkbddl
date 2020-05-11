@@ -40,7 +40,7 @@
 
              [a](survivorat s p4)
              [a](survivorat s p5)
-             [a](survivorat s p8)
+             [a](!survivorat s p8)
                 
              ;(obs s p4) (obs s p5) (obs s p8)  -- to force planner to communicate (communicating all baseline)       
 

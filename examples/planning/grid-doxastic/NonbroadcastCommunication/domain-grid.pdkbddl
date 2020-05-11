@@ -1,6 +1,6 @@
 (define (domain grid)
 
-    (:agents a b c)
+    (:agents a b c d)
     (:types pos survivor)
     (:constants)
     (:predicates
@@ -11,7 +11,7 @@
            (checked ?p - pos)
           {AK}(leader ?ag - agent)
           {AK}(bet ?ag - agent)
-              (obs ?p - pos)      -- to force planner to communicate (communicating all baseline)
+              (obs ?p - pos) ;     -- to force planner to communicate (communicating all baseline)
 
     ) 
            
@@ -44,5 +44,14 @@
       :precondition       (and (leader ?g2) (bet ?ag) [?ag](survivorat ?s ?p1)) 
       :effect             (and [?g2](survivorat ?s ?p1) 
                                     (obs ?p1))
-    ) 
+    )
+
+    (:action badcomm
+      :derive-condition   always
+      :parameters         (?p ?p1 - pos ?ag ?g2 - agent  ?s - survivor)
+      :precondition       (and (leader ?g2) (bet ?ag) [?ag](survivorat ?s ?p1)) 
+      :effect             (and [?g2](!survivorat ?s ?p1) 
+                                    (obs ?p1))
+    )
+
 )

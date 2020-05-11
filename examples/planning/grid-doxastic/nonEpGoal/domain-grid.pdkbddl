@@ -1,6 +1,6 @@
 (define (domain grid)
 
-    (:agents a b c)
+    (:agents a b c d)
     (:types pos survivor)
     (:constants)
     (:predicates
@@ -38,15 +38,20 @@
     (:action comm
       :derive-condition   always
       :parameters         (?p - pos ?a - agent  ?s - survivor)
-      :precondition       (and (at ?a ?p)[?a](survivorat ?s ?p)) 
+      :precondition       (and (at ?a ?p) [?a](survivorat ?s ?p)) 
       :effect             (and ;(obs ?s ?p) 
                                (forall ?g - agent 
                                    [?g](survivorat ?s ?p)))
-    ) 
+    )
 
-
-
-
+    (:action badcomm
+      :derive-condition   always
+      :parameters         (?p - pos ?a - agent  ?s - survivor)
+      :precondition       (and (at ?a ?p) [?a](survivorat ?s ?p)) 
+      :effect             (and
+                               (forall ?g - agent 
+                                   (when (!at ?g ?p) [?g](survivorat ?s ?p))))
+    )
 )
 
 
