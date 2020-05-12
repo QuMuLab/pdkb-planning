@@ -316,8 +316,9 @@ class ValidGeneration(Problem):
 
         # Solve the problem
         planner_path = os.path.dirname(os.path.abspath(__file__))
-        chosen_planner = 'siw-then-bfsf' # Can use bfs_f, siw, or siw-then-bfsf
-        run_command("%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt" % (planner_path, chosen_planner),
+        chosen_planner = 'bfws' # Can use bfs_f, siw, siw-then-bfsf, or bfws
+        planner_options = '--k-M-BFWS 2 --max_novelty 1' # make sure they make sense with the planner choice
+        run_command("%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt %s" % (planner_path, chosen_planner, planner_options),
                     output_file = 'pdkb-plan.out',
                     MEMLIMIT = "2000000",
                     TIMELIMIT = "1800")
