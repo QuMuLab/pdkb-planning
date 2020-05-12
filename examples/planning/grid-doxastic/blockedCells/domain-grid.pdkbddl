@@ -1,6 +1,4 @@
-(define (domain grid)
 
-    (:agents a b c d)
     (:types pos survivor)
     (:constants)
     (:predicates
@@ -12,8 +10,8 @@
            (survivorat ?s - survivor ?p - pos)
            (hiddensurvivorat ?s - survivor ?p - pos)
         {AK}(obs ?p - pos)
-            (obss ?p - pos)  -- to force planner to communicate (communicating all baseline)
-            (msg ?p - pos)      -- to force planner to communicate (communicating all baseline)
+            (obss ?p - pos) ; -- to force planner to communicate (communicating all baseline)
+            (msg ?p - pos)   ;   -- to force planner to communicate (communicating all baseline)
         
 
     )
@@ -53,7 +51,7 @@
 
                           )
                          
-    ) 
+    )
 
     
     (:action sensesurvivors
@@ -75,6 +73,15 @@
                                (forall ?g - agent 
                                    [?g](survivorat ?s ?p)))
     ) 
+
+    (:action badcommsurvivor
+      :derive-condition   always
+      :parameters         (?p - pos ?a - agent  ?s - survivor)
+      :precondition       (and (at ?a ?p) [?a](survivorat ?s ?p)) 
+      :effect             (and (msg ?p) 
+                               (forall ?g - agent 
+                                   (when (!at ?g ?p) [?g](!survivorat ?s ?p))))
+    )
 
 
 

@@ -1,4 +1,8 @@
 
+(define (domain grid)
+
+    (:agents a b c)
+
 {include:domain-grid.pdkbddl}
 
 
@@ -36,7 +40,9 @@
   )
 
     (:goal  
- 
+
+        [a](survivorat s p4)
+        [b](!survivorat s p4)
 
          (forall ?p - pos
              (checked ?p)) 
@@ -48,7 +54,7 @@
 
 
          (obss p1) (obss p2) (obss p3) (obss p4) (obss p7) (obss p8) 
-         (obss p9) (obss p10) (obss p0011) (obss p012) (msg p4)          -- to force planner to communicate (communicating all baseline)
+         (obss p9) (obss p10) (obss p0011) (obss p012) (msg p4)      ;    -- to force planner to communicate (communicating all baseline)
 
          (obs p1) (obs p2) (obs p3) (obs p4) (obs p7) (obs p8) (obs p9) (obs p10) (obs p0011) (obs p012) 
 

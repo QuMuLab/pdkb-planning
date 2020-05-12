@@ -1,4 +1,8 @@
 
+(define (domain grid)
+
+    (:agents a b c)
+
 {include:domain-grid.pdkbddl}
 
 
@@ -26,7 +30,7 @@
 		(hiddensurvivorat s p5)
 		(hiddensurvivorat s p8)
 
-                (at a p1)(at b p4)(at c p9)(at d p2)
+                (at a p1)(at b p4)(at c p9)
                 (leader a)
                  (bet b)
                  

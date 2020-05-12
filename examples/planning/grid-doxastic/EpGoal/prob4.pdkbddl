@@ -1,4 +1,8 @@
 
+(define (domain grid)
+
+    (:agents a b c d)
+
 {include:domain-grid.pdkbddl}
 
 
@@ -38,13 +42,13 @@
              [a](survivorat s p4)
              [a](survivorat s p5)
              [a](survivorat s p8)
-             [b](survivorat s p4)
+             [b](!survivorat s p4)
              [b](survivorat s p5)
              [b](survivorat s p8)
              [c](survivorat s p4)
-             [c](survivorat s p5)
+             [c](!survivorat s p5)
              [c](survivorat s p8)
-             [d](survivorat s p4)
+             [d](!survivorat s p4)
              [d](survivorat s p5)
              [d](survivorat s p8)
              

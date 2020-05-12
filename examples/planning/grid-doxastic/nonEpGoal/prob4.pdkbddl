@@ -1,4 +1,8 @@
 
+(define (domain grid)
+
+    (:agents a b c d)
+
 {include:domain-grid.pdkbddl}
 
 
