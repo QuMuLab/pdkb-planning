@@ -13,7 +13,11 @@ RUN apt-get update && apt-get -y install locales
 RUN apt-get install -y \
         build-essential \
         vim \
-        git
+        git \
+        bison \
+        flex
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y expect
 
 # install python and related
 RUN apt-get install -y python3 python3-dev python3-pip python3-venv
@@ -29,6 +33,12 @@ RUN git clone https://github.com/QuMuLab/pdkb-planning.git
 WORKDIR /MEP/pdkb-planning
 RUN chmod 777 pdkb/planners/*
 RUN python3 setup.py install
+
+# Get the MEPK library
+RUN git clone https://github.com/sysulic/MEPK.git /MEP/MEPK
+WORKDIR /MEP/MEPK/src
+RUN make
+
 
 WORKDIR /MEP
 
