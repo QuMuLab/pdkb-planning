@@ -1,5 +1,6 @@
-import glob
-import os
+import glob, os, re, subprocess, sys, time
+
+AIJ = (len(sys.argv) > 1 and sys.argv[1] == 'AIJ')
 
 domains = [
     'examples/planning/bw4t/EpGoal',
@@ -11,6 +12,7 @@ domains = [
     'examples/planning/corridor',
     'examples/planning/corridor-doxastic',
     'examples/planning/grapevine',
+    'examples/planning/grapevine-doxastic',
     'examples/planning/thief/prob-paper1.pdkbddl',
     'examples/planning/hattari/problem.pdkbddl',
 
@@ -19,7 +21,26 @@ domains = [
     'examples/planning/grid/nonEpGoal',
     'examples/planning/grid/broadcastCommunication',
     'examples/planning/grid/blockedCells',
+
+    'examples/planning/grid-doxastic/EpGoal',
+    'examples/planning/grid-doxastic/NonbroadcastCommunication',
+    'examples/planning/grid-doxastic/nonEpGoal',
+    'examples/planning/grid-doxastic/broadcastCommunication',
+    'examples/planning/grid-doxastic/blockedCells',
 ]
+
+if AIJ:
+    domains = [
+        'examples/planning/corridor-doxastic',
+        'examples/planning/grapevine-doxastic',
+        'examples/planning/thief/prob-paper1.pdkbddl',
+        'examples/planning/hattari/problem.pdkbddl',
+        'examples/planning/grid-doxastic/EpGoal',
+        'examples/planning/grid-doxastic/NonbroadcastCommunication',
+        'examples/planning/grid-doxastic/nonEpGoal',
+        'examples/planning/grid-doxastic/broadcastCommunication',
+        'examples/planning/grid-doxastic/blockedCells',
+    ]
 
 valid_file_names = ['prob1', 'prob2', 'prob3', 'prob4',
                     'prob-paper1',  'prob-paper2',  'prob-paper3',
@@ -29,11 +50,20 @@ valid_file_names += ["prob_%d_%d" % (num_depth, num_ag) \
                         for num_depth in [1,3,5] \
                         for num_ag in [3,7]]
 
+valid_file_names += ["prob-%dag-%dg-%dd" % (num_ag, num_g, num_depth) \
+                        for num_ag in [4,8] \
+                        for num_g in [2,4,8] \
+                        for num_depth in [1,2]]
+
 commands = [
     ('module', "python3 -m pdkb.planner {} --keep-files"),
 ]
 
 keepfiles = ("pdkb-plan.out", "pdkb-plan.out.err", "pdkb-plan.txt", "pdkb-problem.pddl", "pdkb-domain.pddl")
+
+if AIJ:
+    with open("data.csv", 'w') as f:
+        f.write("Problem,Preprocess Time,Planning Time,Total Time")
 
 for command_set, command in commands:
     for domain in domains:
@@ -45,7 +75,17 @@ for command_set, command in commands:
             if problem_base in valid_file_names:
                 print(pdkbddl)
                 print(command.format(pdkbddl))
-                os.system(command.format(pdkbddl))
+                
+                t0 = time.time()
+                output = subprocess.check_output(command.format(pdkbddl), shell=True).decode("utf-8")
+                print(output)
+                total_t = time.time() - t0
+                planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
+
+                if AIJ:
+                    with open("data.csv", 'a') as f:
+                        f.write("\n%s,%f,%f,%f" % (pdkbddl, (total_t-planner_t), planner_t, total_t))
+
                 output_dir_name = "output/{}/{}/{}".format(command_set, domain, problem_base)
                 os.makedirs(output_dir_name, exist_ok=True)
                 for keepfile in keepfiles:
