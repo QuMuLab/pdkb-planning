@@ -316,10 +316,15 @@ class ValidGeneration(Problem):
 
         # Solve the problem
         planner_path = os.path.dirname(os.path.abspath(__file__))
-        chosen_planner = 'bfws' # Can use bfs_f, siw, siw-then-bfsf, or bfws
-        planner_options = '--k-M-BFWS 2 --max_novelty 1' # make sure they make sense with the planner choice
+        
+        # chosen_planner = 'bfws' # Can use bfs_f, siw, siw-then-bfsf, or bfws
+        # planner_options = '--k-M-BFWS 2 --max_novelty 1' # make sure they make sense with the planner choice
+        # planner_cmd = "%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt %s" % (planner_path, chosen_planner, planner_options)
+        
+        planner_cmd = "python3 %s/planners/staged_bfws.py pdkb-domain.pddl pdkb-problem.pddl pdkb-plan.txt" % planner_path
+
         t0 = time.time()
-        run_command("%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt %s" % (planner_path, chosen_planner, planner_options),
+        run_command(planner_cmd,
                     output_file = 'pdkb-plan.out',
                     MEMLIMIT = "2000000",
                     TIMELIMIT = "1800")
