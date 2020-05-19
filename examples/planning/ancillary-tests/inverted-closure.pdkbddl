@@ -1,0 +1,37 @@
+
+(define (domain inverted-closure)
+    (:agents a)
+    (:types )
+    (:constants )
+    (:predicates (p) (q))
+
+    (:action apply
+        :derive-condition   always
+        :precondition       (and )
+        :effect             (and (not <a>(p)))
+    )
+
+    (:action check
+        :derive-condition   always
+        :precondition       (and (not [a](p)))
+        :effect             (q)
+    )
+)
+
+
+(define (problem prob)
+
+    (:domain inverted-closure)
+
+    (:projection )
+    (:depth 2)
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+        [a](p)
+    )
+
+    (:goal (q))
+
+)

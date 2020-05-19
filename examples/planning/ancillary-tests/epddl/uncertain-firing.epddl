@@ -1,0 +1,36 @@
+
+
+(define (domain uncertain-firing)
+    (:objects
+    )
+    
+    (:agents
+        a
+    )
+    
+  (:predicates  (p) (q) (r)
+  )
+   
+    (:action apply
+        :category (ontic)
+        :parameters ()
+        :precondition (True)
+        :effect (<{(p)} {(q)}>
+                 <{(K_a (p))} {(K_a (q))}>)
+    )
+
+    (:action check
+        :category (ontic)
+        :parameters ()
+        :precondition (not (K_a (not (q))))
+        :effect             (<{(True)} {(r)}>)
+    )
+
+    (:init (K_a (not (q))))
+
+    (:constraint (True)
+    )
+    
+    (:goal (r))
+)
+

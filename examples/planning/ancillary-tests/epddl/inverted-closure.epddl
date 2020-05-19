@@ -1,0 +1,35 @@
+
+
+(define (domain inverted-closure)
+    (:objects
+    )
+    
+    (:agents
+        a
+    )
+    
+  (:predicates  (p) (q)
+  )
+   
+    (:action apply
+        :category (ontic)
+        :parameters ()
+        :precondition (True)
+        :effect (<{(True)} {(K_a (not (p)))}>)
+    )
+
+    (:action check
+        :category (ontic)
+        :parameters ()
+        :precondition (not (K_a (p)))
+        :effect             (<{(True)} {(q)}>)
+    )
+
+    (:init (K_a (p)))
+
+    (:constraint (True)
+    )
+    
+    (:goal (q))
+)
+

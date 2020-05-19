@@ -1,0 +1,37 @@
+
+(define (domain uncertain-firing)
+    (:agents a)
+    (:types )
+    (:constants )
+    (:predicates (p) (q) (r))
+
+    (:action apply
+        :derive-condition   always
+        :precondition       (and )
+        :effect             (and (when (p) (q)))
+    )
+
+    (:action check
+        :derive-condition   always
+        :precondition       (and <a>(q))
+        :effect             (r)
+    )
+)
+
+
+(define (problem prob)
+
+    (:domain uncertain-firing)
+
+    (:projection )
+    (:depth 2)
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+        [a](!q)
+    )
+
+    (:goal (r))
+
+)

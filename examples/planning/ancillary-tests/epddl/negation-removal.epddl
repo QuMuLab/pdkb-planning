@@ -1,0 +1,35 @@
+
+
+(define (domain negation-removal)
+    (:objects
+    )
+    
+    (:agents
+        a
+    )
+    
+  (:predicates  (p) (q)
+  )
+   
+    (:action apply
+        :category (ontic)
+        :parameters ()
+        :precondition (True)
+        :effect (<{(True)} {(K_a (p))}>)
+    )
+
+    (:action check
+        :category (ontic)
+        :parameters ()
+        :precondition (K_a (p))
+        :effect             (<{(True)} {(q)}>)
+    )
+
+    (:init (and (not (K_a (not (p)))) (not (K_a (p)))))
+
+    (:constraint (True)
+    )
+    
+    (:goal (q))
+)
+
