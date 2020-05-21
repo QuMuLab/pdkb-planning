@@ -306,7 +306,7 @@ class ValidGeneration(Problem):
                 #  perspective of the final agent
                 act.project_pre(self.agent_projection[-1])
 
-    def solve(self):
+    def solve(self, old_planner=False):
 
         print("\n\nCond effs (orig): %d (%d)" % (self.comp_cond_count, self.orig_cond_count))
 
@@ -321,7 +321,10 @@ class ValidGeneration(Problem):
         # planner_options = '--k-M-BFWS 2 --max_novelty 1' # make sure they make sense with the planner choice
         # planner_cmd = "%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt %s" % (planner_path, chosen_planner, planner_options)
         
-        planner_cmd = "python3 %s/planners/staged_bfws.py pdkb-domain.pddl pdkb-problem.pddl pdkb-plan.txt" % planner_path
+        if old_planner:
+            planner_cmd = "%s/planners/siw-then-bfsf --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt" % planner_path
+        else:
+            planner_cmd = "python3 %s/planners/staged_bfws.py pdkb-domain.pddl pdkb-problem.pddl pdkb-plan.txt" % planner_path
 
         t0 = time.time()
         run_command(planner_cmd,

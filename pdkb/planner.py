@@ -14,7 +14,7 @@ def cleanup():
     os.system('rm -f execution.details')
 
 
-def solve(pdkbddl_file):
+def solve(pdkbddl_file, old_planner=False):
 
     print()
 
@@ -43,7 +43,7 @@ def solve(pdkbddl_file):
 
     print("Solving problem...", end=' ')
     sys.stdout.flush()
-    problem.solve()
+    problem.solve(old_planner)
     print("done!")
 
     print("\nTime: %f s" % (time.time() - t_start))
@@ -55,10 +55,10 @@ def solve(pdkbddl_file):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("\nUsage: python planner.py <pdkbddl file> [--keep-files]\n")
+        print("\nUsage: python planner.py <pdkbddl file> [--keep-files] [--old-planner]\n")
         sys.exit(1)
 
-    solve(sys.argv[1])
+    solve(sys.argv[1], old_planner=('--old-planner' in sys.argv))
 
     if len(sys.argv) < 3 or '--keep-files' != sys.argv[2]:
         cleanup()
