@@ -106,7 +106,7 @@ def convert_action(action, depth, agents, props, akprops):
 
 def parse_problem(prob, domain):
 
-    assert prob.task in list(PROBLEM_TYPES.keys()), "Error: Bad problem type: %s" % prob_type
+    assert prob.task in list(PROBLEM_TYPES.keys()), "Error: Bad problem type: %s" % prob.task
 
     return PROBLEM_TYPES[prob.task](prob, domain)
 
