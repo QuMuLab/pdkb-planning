@@ -63,7 +63,7 @@ keepfiles = ("pdkb-plan.out", "pdkb-plan.out.err", "pdkb-plan.txt", "pdkb-proble
 
 if AIJ:
     with open("data.csv", 'w') as f:
-        f.write("Problem,Preprocess Time,Old Planning Time,Planning Time,Total Time")
+        f.write("Problem,Preprocess Time,Old Planning Time,Planning Time,Total Time,Old Plan Length,Plan Length")
 
 for command_set, command in commands:
     for domain in domains:
@@ -81,13 +81,15 @@ for command_set, command in commands:
                 print(output)
                 total_t = time.time() - t0
                 planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
+                planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
 
                 if AIJ:
                     output = subprocess.check_output(command.format(pdkbddl)+' --old-planner', shell=True).decode("utf-8")
                     print(output)
                     old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
+                    old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
                     with open("data.csv", 'a') as f:
-                        f.write("\n%s,%f,%f,%f,%f" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t))
+                        f.write("\n%s,%f,%f,%f,%f,%d,%d" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, planner_s, old_planner_s))
 
                 output_dir_name = "output/{}/{}/{}".format(command_set, domain, problem_base)
                 os.makedirs(output_dir_name, exist_ok=True)
