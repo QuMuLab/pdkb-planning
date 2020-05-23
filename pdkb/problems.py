@@ -334,7 +334,7 @@ class ValidGeneration(Problem):
         print("\nPlan Time: %.5f\n" % (time.time() - t0))
         self.plan = parse_output_ipc('pdkb-plan.txt')
 
-        print("Plan Length: %d\n" % len(self.plan))
+        print("Plan Length: %d\n" % len(self.plan.actions))
 
 
     def output_solution(self):

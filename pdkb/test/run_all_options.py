@@ -89,7 +89,7 @@ for command_set, command in commands:
                     old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
                     old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
                     with open("data.csv", 'a') as f:
-                        f.write("\n%s,%f,%f,%f,%f,%d,%d" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, planner_s, old_planner_s))
+                        f.write("\n%s,%f,%f,%f,%f,%d,%d" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, old_planner_s, planner_s))
 
                 output_dir_name = "output/{}/{}/{}".format(command_set, domain, problem_base)
                 os.makedirs(output_dir_name, exist_ok=True)
