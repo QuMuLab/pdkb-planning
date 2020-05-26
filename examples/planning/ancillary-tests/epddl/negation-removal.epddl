@@ -21,11 +21,11 @@
     (:action check
         :category (ontic)
         :parameters ()
-        :precondition (K_a (p))
+        :precondition (not (DK_a (not (p))))
         :effect             (<{(True)} {(q)}>)
     )
 
-    (:init (and (not (K_a (not (p)))) (not (K_a (p)))))
+    (:init (and (DK_a (p)) (DK_a (not (p)))))
 
     (:constraint (True)
     )

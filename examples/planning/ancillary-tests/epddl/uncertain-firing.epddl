@@ -15,14 +15,14 @@
         :category (ontic)
         :parameters ()
         :precondition (True)
-        :effect (<{(p)} {(q)}>
-                 <{(K_a (p))} {(K_a (q))}>)
+        :effect (<{(p)} {(q)}>)
+                 ;<{(K_a (p))} {(K_a (q))}>)
     )
 
     (:action check
         :category (ontic)
         :parameters ()
-        :precondition (not (K_a (not (q))))
+        :precondition (DK_a (q))
         :effect             (<{(True)} {(r)}>)
     )
 

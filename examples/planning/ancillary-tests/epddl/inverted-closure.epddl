@@ -15,7 +15,7 @@
         :category (ontic)
         :parameters ()
         :precondition (True)
-        :effect (<{(True)} {(K_a (not (p)))}>)
+        :effect (<{(True)} {(not (DK_a (p)))}>)
     )
 
     (:action check
