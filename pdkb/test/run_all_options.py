@@ -77,17 +77,26 @@ for command_set, command in commands:
                 print(command.format(pdkbddl))
                 
                 t0 = time.time()
-                output = subprocess.check_output(command.format(pdkbddl), shell=True).decode("utf-8")
-                print(output)
-                total_t = time.time() - t0
-                planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
-                planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
-
-                if AIJ:
-                    output = subprocess.check_output(command.format(pdkbddl)+' --old-planner', shell=True).decode("utf-8")
+                try:
+                    output = subprocess.check_output(command.format(pdkbddl), shell=True).decode("utf-8")
                     print(output)
-                    old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
-                    old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
+                    planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                except:
+                    planner_t = -1.0
+                    planner_s = 0
+                total_t = time.time() - t0
+                
+                if AIJ:
+                    try:
+                        output = subprocess.check_output(command.format(pdkbddl)+' --old-planner', shell=True).decode("utf-8")
+                        print(output)
+                        old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
+                        old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    except:
+                        old_planner_t = -1.0
+                        old_planner_s = 0
+
                     with open("data.csv", 'a') as f:
                         f.write("\n%s,%f,%f,%f,%f,%d,%d" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, old_planner_s, planner_s))
 
