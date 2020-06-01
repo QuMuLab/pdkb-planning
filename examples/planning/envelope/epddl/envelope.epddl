@@ -15,6 +15,7 @@
         :parameters ()
         :precondition (and (alice_turn) (alice_waiting))
         :effect (<{(True)} {(and (bob_turn) (not (alice_turn)) (not (alice_waiting)))}>
+                 <{(True)} {(K_bob (or (K_alice (secret)) (K_alice (not (secret)))))}>
                  <{(secret)} {(K_alice (secret))}>
                  <{(!secret)} {(K_alice (!secret))}>)
     )
@@ -24,6 +25,7 @@
         :parameters ()
         :precondition (and (bob_turn) (bob_waiting))
         :effect (<{(True)} {(and (alice_turn) (not (bob_turn)) (not (bob_waiting)))}>
+                 <{(True)} {(K_alice (or (K_bob (secret)) (K_bob (not (secret)))))}>
                  <{(secret)} {(K_bob (secret))}>
                  <{(!secret)} {(K_bob (!secret))}>)
     )
