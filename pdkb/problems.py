@@ -389,7 +389,8 @@ class ValidAssessment(Problem):
                 #  perspective of the final agent
                 act.project_pre(self.agent_projection[-1])
 
-    def solve(self):
+    # Parameter may be passed in if the "old planner" is requested.
+    def solve(self, _=None):
 
         # Write the domain pddl file in case we want to debug
         write_file('pdkb-domain.pddl', self.domain.pddl())
