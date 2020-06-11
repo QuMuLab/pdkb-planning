@@ -251,7 +251,7 @@ class CondEff(object):
 
     def __ne__(self, other):
         return not self.__cmp__(other)
-    
+
     def __lt__(self, other):
         return self.hash < other.hash
 
@@ -260,6 +260,10 @@ class CondEff(object):
         return max([rml.get_depth() for rml in self.condp.rmls | self.condn.rmls | set([self.eff])])
 
     def pddl(self, spacing = '', negate = False):
+
+        # Set to true if you want to export effects in the style of epddl
+        #  Note that this will not be compatible with classical planners
+        EPDDL = False
 
         delim = '\n' + spacing + '           '
 
@@ -270,18 +274,32 @@ class CondEff(object):
 
         if (not self.condp.rmls) and (not self.condn.rmls):
             if negate:
-                return reason + spacing + "(not (%s))" % self.eff.pddl()
+                if EPDDL:
+                    return reason + spacing + "<{(True)} {(not (%s))}>" % self.eff.pddl()
+                else:
+                    return reason + spacing + "(not (%s))" % self.eff.pddl()
             else:
-                return reason + spacing + "(%s)" % self.eff.pddl()
+                if EPDDL:
+                    return reason + spacing + "<{(True)} {(%s)}>" % self.eff.pddl()
+                else:
+                    return reason + spacing + "(%s)" % self.eff.pddl()
+
+        cond_size = len(self.condp) + len(self.condn)
+        condition = delim.join(["(%s)" % rml.pddl() for rml in self.condp] + \
+                               ["(not (%s))" % rml.pddl() for rml in self.condn])
+        if cond_size > 1:
+            condition = "(and %s)" % condition
 
         if negate:
-            return reason + spacing + "(when (and %s)\n%s      (not (%s)))" % \
-                   (delim.join(["(%s)" % rml.pddl() for rml in self.condp] + \
-                               ["(not (%s))" % rml.pddl() for rml in self.condn]), spacing, self.eff.pddl())
+            if EPDDL:
+                return reason + spacing + "<{%s}\n%s      {(not (%s))}>" % (condition, spacing, self.eff.pddl())
+            else:
+                return reason + spacing + "(when (and %s)\n%s      (not (%s)))" % (condition, spacing, self.eff.pddl())
         else:
-            return reason + spacing + "(when (and %s)\n%s      (%s))" % \
-                   (delim.join(["(%s)" % rml.pddl() for rml in self.condp] + \
-                               ["(not (%s))" % rml.pddl() for rml in self.condn]), spacing, self.eff.pddl())
+            if EPDDL:
+                return reason + spacing + "<{%s}\n%s      {(%s)}>" % (condition, spacing, self.eff.pddl())
+            else:
+                return reason + spacing + "(when (and %s)\n%s      (%s))" % (condition, spacing, self.eff.pddl())
 
 
 
