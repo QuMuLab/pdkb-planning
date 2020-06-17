@@ -1,0 +1,350 @@
+fluent at_a_1,at_a_2,at_b_1,at_b_2,at_c_1,at_c_2,at_d_1,at_d_2,sa,sb,sc,sd;
+fluent at_a_3,at_b_3,at_c_3,at_d_3;
+
+
+action right_a, right_b, right_c, right_d, left_a, left_b, left_c, left_d;
+action share_a_1, share_a_2, share_a_3, share_b_1, share_b_2, share_b_3, share_c_1, share_c_2, share_c_3, share_d_1, share_d_2, share_d_3;
+action fib_a_1, fib_a_2, fib_a_3, fib_b_1, fib_b_2, fib_b_3, fib_c_1, fib_c_2, fib_c_3, fib_d_1, fib_d_2, fib_d_3;
+
+
+
+agent a,b,c,d;
+
+
+executable right_a if -at_a_3;
+right_a causes at_a_2, -at_a_1 if at_a_1;
+right_a causes at_a_3, -at_a_2 if at_a_2;
+a observes right_a;
+b observes right_a;
+c observes right_a;
+d observes right_a;
+
+executable right_b if -at_b_3;
+right_b causes at_b_2, -at_b_1 if at_b_1;
+right_b causes at_b_3, -at_b_2 if at_b_2;
+a observes right_b;
+b observes right_b;
+c observes right_b;
+d observes right_b;
+
+executable right_c if -at_c_3;
+right_c causes at_c_2, -at_c_1 if at_c_1;
+right_c causes at_c_3, -at_c_2 if at_c_2;
+a observes right_c;
+b observes right_c;
+c observes right_c;
+d observes right_c;
+
+executable right_d if -at_d_3;
+right_d causes at_d_2, -at_d_1 if at_d_1;
+right_d causes at_d_3, -at_d_2 if at_d_2;
+a observes right_d;
+b observes right_d;
+c observes right_d;
+d observes right_d;
+
+executable left_a if -at_a_1;
+left_a causes -at_a_2, at_a_1 if at_a_2;
+left_a causes -at_a_3, at_a_2 if at_a_3;
+a observes left_a;
+b observes left_a;
+c observes left_a;
+d observes left_a;
+
+executable left_b if -at_b_1;
+left_b causes -at_b_2, at_b_1 if at_b_2;
+left_b causes -at_b_3, at_b_2 if at_b_3;
+a observes left_b;
+b observes left_b;
+c observes left_b;
+d observes left_b;
+
+executable left_c if -at_c_1;
+left_c causes -at_c_2, at_c_1 if at_c_2;
+left_c causes -at_c_3, at_c_2 if at_c_3;
+a observes left_c;
+b observes left_c;
+c observes left_c;
+d observes left_c;
+
+executable left_d if -at_d_1;
+left_d causes -at_d_2, at_d_1 if at_d_2;
+left_d causes -at_d_3, at_d_2 if at_d_3;
+a observes left_d;
+b observes left_d;
+c observes left_d;
+d observes left_d;
+
+executable share_a_1 if B(a,sa), at_a_1;
+share_a_1 announces sa;
+a observes share_a_1;
+b observes share_a_1 if ((-B(b,sa)), (-B(b,-sa))), at_b_1;
+c observes share_a_1 if ((-B(c,sa)), (-B(c,-sa))), at_c_1;
+d observes share_a_1 if ((-B(d,sa)), (-B(d,-sa))), at_d_1;
+b aware_of share_a_1 if ( (B(b,sa)) | (B(b,-sa))), at_b_1;
+c aware_of share_a_1 if ( (B(c,sa)) | (B(c,-sa))), at_c_1;
+d aware_of share_a_1 if ( (B(d,sa)) | (B(d,-sa))), at_d_1;
+
+executable share_a_2 if B(a,sa), at_a_2;
+share_a_2 announces sa;
+a observes share_a_2;
+b observes share_a_2 if ((-B(b,sa)), (-B(b,-sa))), at_b_2;
+c observes share_a_2 if ((-B(c,sa)), (-B(c,-sa))), at_c_2;
+d observes share_a_2 if ((-B(d,sa)), (-B(d,-sa))), at_d_2;
+b aware_of share_a_2 if ( (B(b,sa)) | (B(b,-sa))), at_b_2;
+c aware_of share_a_2 if ( (B(c,sa)) | (B(c,-sa))), at_c_2;
+d aware_of share_a_2 if ( (B(d,sa)) | (B(d,-sa))), at_d_2;
+
+executable share_a_3 if B(a,sa), at_a_3;
+share_a_3 announces sa;
+a observes share_a_3;
+b observes share_a_3 if ((-B(b,sa)), (-B(b,-sa))), at_b_3;
+c observes share_a_3 if ((-B(c,sa)), (-B(c,-sa))), at_c_3;
+d observes share_a_3 if ((-B(d,sa)), (-B(d,-sa))), at_d_3;
+b aware_of share_a_3 if ( (B(b,sa)) | (B(b,-sa))), at_b_3;
+c aware_of share_a_3 if ( (B(c,sa)) | (B(c,-sa))), at_c_3;
+d aware_of share_a_3 if ( (B(d,sa)) | (B(d,-sa))), at_d_3;
+
+executable share_b_1 if B(b,sb), at_b_1;
+share_b_1 announces sb;
+b observes share_b_1;
+a observes share_b_1 if ((-B(a,sb)), (-B(a,-sb))), at_a_1;
+c observes share_b_1 if ((-B(c,sb)), (-B(c,-sb))), at_c_1;
+d observes share_b_1 if ((-B(d,sb)), (-B(d,-sb))), at_d_1;
+a aware_of share_b_1 if ((B(a,sb)) | (B(a,-sb))), at_a_1;
+c aware_of share_b_1 if ((B(c,sb)) | (B(c,-sb))), at_c_1;
+d aware_of share_b_1 if ((B(d,sb)) | (B(d,-sb))), at_d_1;
+
+executable share_b_2 if B(b,sb), at_b_2;
+share_b_2 announces sb;
+b observes share_b_2;
+a observes share_b_2 if ((-B(a,sb)), (-B(a,-sb))), at_a_2;
+c observes share_b_2 if ((-B(c,sb)), (-B(c,-sb))), at_c_2;
+d observes share_b_2 if ((-B(d,sb)), (-B(d,-sb))), at_d_2;
+a aware_of share_b_2 if ((B(a,sb)) | (B(a,-sb))), at_a_2;
+c aware_of share_b_2 if ((B(c,sb)) | (B(c,-sb))), at_c_2;
+d aware_of share_b_2 if ((B(d,sb)) | (B(d,-sb))), at_d_2;
+
+executable share_b_3 if B(b,sb), at_b_3;
+share_b_3 announces sb;
+b observes share_b_3;
+a observes share_b_3 if ((-B(a,sb)), (-B(a,-sb))), at_a_3;
+c observes share_b_3 if ((-B(c,sb)), (-B(c,-sb))), at_c_3;
+d observes share_b_3 if ((-B(d,sb)), (-B(d,-sb))), at_d_3;
+a aware_of share_b_3 if ((B(a,sb)) | (B(a,-sb))), at_a_3;
+c aware_of share_b_3 if ((B(c,sb)) | (B(c,-sb))), at_c_3;
+d aware_of share_b_3 if ((B(d,sb)) | (B(d,-sb))), at_d_3;
+
+executable share_c_1 if B(c,sc), at_c_1;
+share_c_1 announces sc;
+c observes share_c_1;
+a observes share_c_1 if ((-B(a,sc)), (-B(a,-sc))), at_a_1;
+b observes share_c_1 if ((-B(b,sc)), (-B(b,-sc))), at_b_1;
+d observes share_c_1 if ((-B(d,sc)), (-B(d,-sc))), at_d_1;
+a aware_of share_c_1 if ((B(a,sc)) | (B(a,-sc))), at_a_1;
+b aware_of share_c_1 if ((B(b,sc)) | (B(b,-sc))), at_b_1;
+d aware_of share_c_1 if ((B(d,sc)) | (B(d,-sc))), at_d_1;
+
+executable share_c_2 if B(c,sc), at_c_2;
+share_c_2 announces sc;
+c observes share_c_2;
+a observes share_c_2 if ((-B(a,sc)), (-B(a,-sc))), at_a_2;
+b observes share_c_2 if ((-B(b,sc)), (-B(b,-sc))), at_b_2;
+d observes share_c_2 if ((-B(d,sc)), (-B(d,-sc))), at_d_2;
+a aware_of share_c_2 if ((B(a,sc)) | (B(a,-sc))), at_a_2;
+b aware_of share_c_2 if ((B(b,sc)) | (B(b,-sc))), at_b_2;
+d aware_of share_c_2 if ((B(d,sc)) | (B(d,-sc))), at_d_2;
+
+executable share_c_3 if B(c,sc), at_c_3;
+share_c_3 announces sc;
+c observes share_c_3;
+a observes share_c_3 if ((-B(a,sc)), (-B(a,-sc))), at_a_3;
+b observes share_c_3 if ((-B(b,sc)), (-B(b,-sc))), at_b_3;
+d observes share_c_3 if ((-B(d,sc)), (-B(d,-sc))), at_d_3;
+a aware_of share_c_3 if ((B(a,sc)) | (B(a,-sc))), at_a_3;
+b aware_of share_c_3 if ((B(b,sc)) | (B(b,-sc))), at_b_3;
+d aware_of share_c_3 if ((B(d,sc)) | (B(d,-sc))), at_d_3;
+
+
+executable share_d_1 if B(d,sd), at_d_1;
+share_d_1 announces sd;
+d observes share_d_1;
+a observes share_d_1 if ((-B(a,sd)), (-B(a,-sd))), at_a_1;
+b observes share_d_1 if ((-B(b,sd)), (-B(b,-sd))), at_b_1;
+c observes share_d_1 if ((-B(c,sd)), (-B(c,-sd))), at_c_1;
+a aware_of share_d_1 if (( B(a,sd)) | (B(a,-sd))), at_a_1;
+b aware_of share_d_1 if (( B(b,sd)) | (B(b,-sd))), at_b_1;
+c aware_of share_d_1 if (( B(c,sd)) | (B(c,-sd))), at_c_1;
+
+executable share_d_2 if B(d,sd), at_d_2;
+share_d_2 announces sd;
+d observes share_d_2;
+a observes share_d_2 if ((-B(a,sd)), (-B(a,-sd))), at_a_2;
+b observes share_d_2 if ((-B(b,sd)), (-B(b,-sd))), at_b_2;
+c observes share_d_2 if ((-B(c,sd)), (-B(c,-sd))), at_c_2;
+a aware_of share_d_2 if (( B(a,sd)) | (B(a,-sd))), at_a_2;
+b aware_of share_d_2 if (( B(b,sd)) | (B(b,-sd))), at_b_2;
+c aware_of share_d_2 if (( B(c,sd)) | (B(c,-sd))), at_c_2;
+
+executable share_d_3 if B(d,sd), at_d_3;
+share_d_3 announces sd;
+d observes share_d_3;
+a observes share_d_3 if ((-B(a,sd)), (-B(a,-sd))), at_a_3;
+b observes share_d_3 if ((-B(b,sd)), (-B(b,-sd))), at_b_3;
+c observes share_d_3 if ((-B(c,sd)), (-B(c,-sd))), at_c_3;
+a aware_of share_d_3 if (( B(a,sd)) | (B(a,-sd))), at_a_3;
+b aware_of share_d_3 if (( B(b,sd)) | (B(b,-sd))), at_b_3;
+c aware_of share_d_3 if (( B(c,sd)) | (B(c,-sd))), at_c_3;
+
+
+executable fib_a_1 if B(a,sa), at_a_1;
+fib_a_1 lies sa;
+a aware_of fib_a_1;
+b observes fib_a_1 if ((-B(b,sa)), (-B(b,-sa))), at_b_1;
+c observes fib_a_1 if ((-B(c,sa)), (-B(c,-sa))), at_c_1;
+d observes fib_a_1 if ((-B(d,sa)), (-B(d,-sa))), at_d_1;
+b aware_of fib_a_1 if ((B(b,sa)) | (B(b,-sa))), at_b_1;
+c aware_of fib_a_1 if ((B(c,sa)) | (B(c,-sa))), at_c_1;
+d aware_of fib_a_1 if ((B(d,sa)) | (B(d,-sa))), at_d_1;
+
+executable fib_a_2 if B(a,sa), at_a_2;
+fib_a_2 lies sa;
+a aware_of fib_a_2;
+b observes fib_a_2 if ((-B(b,sa)), (-B(b,-sa))), at_b_2;
+c observes fib_a_2 if ((-B(c,sa)), (-B(c,-sa))), at_c_2;
+d observes fib_a_2 if ((-B(d,sa)), (-B(d,-sa))), at_d_2;
+b aware_of fib_a_2 if ((B(b,sa)) | (B(b,-sa))), at_b_2;
+c aware_of fib_a_2 if ((B(c,sa)) | (B(c,-sa))), at_c_2;
+d aware_of fib_a_2 if ((B(d,sa)) | (B(d,-sa))), at_d_2;
+
+executable fib_a_3 if B(a,sa), at_a_3;
+fib_a_3 lies sa;
+a aware_of fib_a_3;
+b observes fib_a_3 if ((-B(b,sa)), (-B(b,-sa))), at_b_3;
+c observes fib_a_3 if ((-B(c,sa)), (-B(c,-sa))), at_c_3;
+d observes fib_a_3 if ((-B(d,sa)), (-B(d,-sa))), at_d_3;
+b aware_of fib_a_3 if ((B(b,sa)) | (B(b,-sa))), at_b_3;
+c aware_of fib_a_3 if ((B(c,sa)) | (B(c,-sa))), at_c_3;
+d aware_of fib_a_3 if ((B(d,sa)) | (B(d,-sa))), at_d_3;
+
+executable fib_b_1 if B(b,sb), at_b_1;
+fib_b_1 lies sb;
+b aware_of fib_b_1;
+a observes fib_b_1 if ((-B(a,sb)), (-B(a,-sb))), at_a_1;
+c observes fib_b_1 if ((-B(c,sb)), (-B(c,-sb))), at_c_1;
+d observes fib_b_1 if ((-B(d,sb)), (-B(d,-sb))), at_d_1;
+a aware_of fib_b_1 if ((B(a,sb)) | (B(a,-sb))), at_a_1;
+c aware_of fib_b_1 if ((B(c,sb)) | (B(c,-sb))), at_c_1;
+d aware_of fib_b_1 if ((B(d,sb)) | (B(d,-sb))), at_d_1;
+
+executable fib_b_2 if B(b,sb), at_b_2;
+fib_b_2 lies sb;
+b aware_of fib_b_2;
+a observes fib_b_2 if ((-B(a,sb)), (-B(a,-sb))), at_a_2;
+c observes fib_b_2 if ((-B(c,sb)), (-B(c,-sb))), at_c_2;
+d observes fib_b_2 if ((-B(d,sb)), (-B(d,-sb))), at_d_2;
+a aware_of fib_b_2 if ((B(a,sb)) | (B(a,-sb))), at_a_2;
+c aware_of fib_b_2 if ((B(c,sb)) | (B(c,-sb))), at_c_2;
+d aware_of fib_b_2 if ((B(d,sb)) | (B(d,-sb))), at_d_2;
+
+executable fib_b_3 if B(b,sb), at_b_3;
+fib_b_3 lies sb;
+b aware_of fib_b_3;
+a observes fib_b_3 if ((-B(a,sb)), (-B(a,-sb))), at_a_3;
+c observes fib_b_3 if ((-B(c,sb)), (-B(c,-sb))), at_c_3;
+d observes fib_b_3 if ((-B(d,sb)), (-B(d,-sb))), at_d_3;
+a aware_of fib_b_3 if ((B(a,sb)) | (B(a,-sb))), at_a_3;
+c aware_of fib_b_3 if ((B(c,sb)) | (B(c,-sb))), at_c_3;
+d aware_of fib_b_3 if ((B(d,sb)) | (B(d,-sb))), at_d_3;
+
+executable fib_c_1 if B(c,sc), at_c_1;
+fib_c_1 lies sc;
+c aware_of fib_c_1;
+a observes fib_c_1 if ((-B(a,sc)), (-B(a,-sc))), at_a_1;
+b observes fib_c_1 if ((-B(b,sc)), (-B(b,-sc))), at_b_1;
+d observes fib_c_1 if ((-B(d,sc)), (-B(d,-sc))), at_d_1;
+a aware_of fib_c_1 if ((B(a,sc)) | (B(a,-sc))), at_a_1;
+b aware_of fib_c_1 if ((B(b,sc)) | (B(b,-sc))), at_b_1;
+d aware_of fib_c_1 if ((B(d,sc)) | (B(d,-sc))), at_d_1;
+
+
+executable fib_c_2 if B(c,sc), at_c_2;
+fib_c_2 lies sc;
+c aware_of fib_c_2;
+a observes fib_c_2 if ((-B(a,sc)), (-B(a,-sc))), at_a_2;
+b observes fib_c_2 if ((-B(b,sc)), (-B(b,-sc))), at_b_2;
+d observes fib_c_2 if ((-B(d,sc)), (-B(d,-sc))), at_d_2;
+a aware_of fib_c_2 if ((B(a,sc)) | (B(a,-sc))), at_a_2;
+b aware_of fib_c_2 if ((B(b,sc)) | (B(b,-sc))), at_b_2;
+d aware_of fib_c_2 if ((B(d,sc)) | (B(d,-sc))), at_d_2;
+
+executable fib_c_3 if B(c,sc), at_c_3;
+fib_c_3 lies sc;
+c aware_of fib_c_3;
+a observes fib_c_3 if ((-B(a,sc)), (-B(a,-sc))), at_a_3;
+b observes fib_c_3 if ((-B(b,sc)), (-B(b,-sc))), at_b_3;
+d observes fib_c_3 if ((-B(d,sc)), (-B(d,-sc))), at_d_3;
+a aware_of fib_c_3 if ((B(a,sc)) | (B(a,-sc))), at_a_3;
+b aware_of fib_c_3 if ((B(b,sc)) | (B(b,-sc))), at_b_3;
+d aware_of fib_c_3 if ((B(d,sc)) | (B(d,-sc))), at_d_3;
+
+
+
+executable fib_d_1 if B(d,sd), at_d_1;
+fib_d_1 lies sd;
+d aware_of fib_d_1;
+a observes fib_d_1 if ((-B(a,sd)), (-B(a,-sd))), at_a_1;
+b observes fib_d_1 if ((-B(b,sd)), (-B(b,-sd))), at_b_1;
+c observes fib_d_1 if ((-B(c,sd)), (-B(c,-sd))), at_c_1;
+a aware_of fib_d_1 if ((B(a,sd)) | (B(a,-sd))), at_a_1;
+b aware_of fib_d_1 if ((B(b,sd)) | (B(b,-sd))), at_b_1;
+c aware_of fib_d_1 if ((B(c,sd)) | (B(c,-sd))), at_c_1;
+
+
+executable fib_d_2 if B(d,sd), at_d_2;
+fib_d_2 lies sd;
+d aware_of fib_d_2;
+a observes fib_d_2 if ((-B(a,sd)), (-B(a,-sd))), at_a_2;
+b observes fib_d_2 if ((-B(b,sd)), (-B(b,-sd))), at_b_2;
+c observes fib_d_2 if ((-B(c,sd)), (-B(c,-sd))), at_c_2;
+a aware_of fib_d_2 if ((B(a,sd))  | (B(a,-sd))), at_a_2;
+b aware_of fib_d_2 if ((B(b,sd))  | (B(b,-sd))), at_b_2;
+c aware_of fib_d_2 if ((B(c,sd))  | (B(c,-sd))), at_c_2;
+
+executable fib_d_3 if B(d,sd), at_d_3;
+fib_d_3 lies sd;
+d aware_of fib_d_3;
+a observes fib_d_3 if ((-B(a,sd)), (-B(a,-sd))), at_a_3;
+b observes fib_d_3 if ((-B(b,sd)), (-B(b,-sd))), at_b_3;
+c observes fib_d_3 if ((-B(c,sd)), (-B(c,-sd))), at_c_3;
+a aware_of fib_d_3 if ((B(a,sd))  | (B(a,-sd))), at_a_3;
+b aware_of fib_d_3 if ((B(b,sd))  | (B(b,-sd))), at_b_3;
+c aware_of fib_d_3 if ((B(c,sd))  | (B(c,-sd))), at_c_3;
+
+
+
+
+initially at_a_1, at_b_1, at_c_1, at_d_1, -at_a_2, -at_b_2, -at_c_2, -at_d_2, sa, sb, sc, sd;
+initially -at_a_3, -at_b_3, -at_c_3, -at_d_3;
+initially C([a,b,c,d], at_a_1);
+initially C([a,b,c,d], at_b_1);
+initially C([a,b,c,d], at_c_1);
+initially C([a,b,c,d], at_d_1);
+initially C([a,b,c,d], -at_a_2);
+initially C([a,b,c,d], -at_b_2);
+initially C([a,b,c,d], -at_c_2);
+initially C([a,b,c,d], -at_d_2);
+initially C([a,b,c,d], -at_a_3);
+initially C([a,b,c,d], -at_b_3);
+initially C([a,b,c,d], -at_c_3);
+initially C([a,b,c,d], -at_d_3);
+initially C([a,b,c,d], (B(a,sa) | B(a,(-sa))));
+initially C([a,b,c,d], (B(b,sb) | B(b,(-sb))));
+initially C([a,b,c,d], (B(c,sc) | B(c,(-sc))));
+initially C([a,b,c,d], (B(d,sd) | B(d,(-sd))));
+
+
+goal B(b, B(c, -sa));
+goal B(c, sa);
+goal B(b, sa);
+goal B(d, B(c, sa));
