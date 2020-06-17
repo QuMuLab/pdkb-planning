@@ -63,7 +63,7 @@ keepfiles = ("pdkb-plan.out", "pdkb-plan.out.err", "pdkb-plan.txt", "pdkb-proble
 
 if AIJ:
     with open("data.csv", 'w') as f:
-        f.write("Problem,Preprocess Time,Old Planning Time,Planning Time,Total Time,Old Plan Length,Plan Length")
+        f.write("Problem,Preprocess Time,Old Planning Time,Planning Time,Total Time,Old Plan Length,Plan Length,Agents,Fluents,Actions,Effects,Depth")
 
 for command_set, command in commands:
     for domain in domains:
@@ -73,35 +73,51 @@ for command_set, command in commands:
             problem_base = filename.split('.pdkbddl')[0]
             dirname = domain
             if problem_base in valid_file_names:
-                print(pdkbddl)
+                # print(pdkbddl)
                 print(command.format(pdkbddl))
-                
+
                 t0 = time.time()
                 try:
                     output = subprocess.check_output(command.format(pdkbddl), shell=True).decode("utf-8")
-                    print(output)
+                    # print(output)
                     planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
                     planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    num_agents = int(re.search(r'^# Agents: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    num_fluents = int(re.search(r'^# Props: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    num_actions = int(re.search(r'^# Acts: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    num_effects = int(re.search(r'^# Effs: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                    num_depth = int(re.search(r'^Depth: ([0-9]+)\n', output, re.MULTILINE).group(1))
                 except:
                     planner_t = -1.0
                     planner_s = 0
+                    num_agents = 0
+                    num_fluents = 0
+                    num_actions = 0
+                    num_effects = 0
+                    num_depth = 0
+
                 total_t = time.time() - t0
-                
+
                 if AIJ:
                     try:
-                        output = subprocess.check_output(command.format(pdkbddl)+' --old-planner', shell=True).decode("utf-8")
-                        print(output)
-                        old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output, re.MULTILINE).group(1))
-                        old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output, re.MULTILINE).group(1))
+                        output2 = subprocess.check_output(command.format(pdkbddl)+' --old-planner', shell=True).decode("utf-8")
+                        # print(output)
+                        old_planner_t = float(re.search(r'^Plan Time: ([0-9]*\.?[0-9]+)\n', output2, re.MULTILINE).group(1))
+                        old_planner_s = int(re.search(r'^Plan Length: ([0-9]+)\n', output2, re.MULTILINE).group(1))
                     except:
                         old_planner_t = -1.0
                         old_planner_s = 0
 
                     with open("data.csv", 'a') as f:
-                        f.write("\n%s,%f,%f,%f,%f,%d,%d" % (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, old_planner_s, planner_s))
+                        f.write("\n%s,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d" % \
+                                (pdkbddl, (total_t-planner_t), old_planner_t, planner_t, total_t, old_planner_s, planner_s, num_agents, num_fluents, num_actions, num_effects, num_depth))
 
                 output_dir_name = "output/{}/{}/{}".format(command_set, domain, problem_base)
                 os.makedirs(output_dir_name, exist_ok=True)
+                with open(os.path.join(output_dir_name, 'new_solver.out'), 'w') as f:
+                    f.write(output)
+                with open(os.path.join(output_dir_name, 'old_solver.out'), 'w') as f:
+                    f.write(output2)
                 for keepfile in keepfiles:
                     if os.path.exists(keepfile):
                         os.rename(keepfile, os.path.join(output_dir_name, keepfile))
