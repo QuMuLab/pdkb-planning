@@ -22,7 +22,7 @@
         :precondition       (and (at ?a ?l) [?a](secret ?as) (initialized))
         :effect             (and
                                 (forall ?a2 - agent
-                                    (when     (at ?a2 ?l)
+                                    (when     (and (at ?a2 ?l) <?a2>(secret ?as))
                                          [?a2](secret ?as)))
                             )
     )
