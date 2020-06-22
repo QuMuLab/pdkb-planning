@@ -15,7 +15,8 @@ RUN apt-get install -y \
         vim \
         git \
         bison \
-        flex
+        flex \
+        bc
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y expect
 
