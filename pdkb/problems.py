@@ -59,7 +59,7 @@ def convert_action(action, depth, agents, props, akprops):
         assert False, "Error for action %s. You need to specify the type of derived condition ('always', 'never', or 'custom')." % action.name
 
 
-    assert isinstance(action.precondition, pdkb.pddl.formula.And)
+    assert isinstance(action.precondition, pdkb.pddl.formula.And), "Precondition of action %s is not an AND statement" % action.name
     for pre in action.precondition.args:
         act.add_pre(prim2rml(pre), negate=isinstance(pre, pdkb.pddl.formula.Not))
 
@@ -316,11 +316,11 @@ class ValidGeneration(Problem):
 
         # Solve the problem
         planner_path = os.path.dirname(os.path.abspath(__file__))
-        
+
         # chosen_planner = 'bfws' # Can use bfs_f, siw, siw-then-bfsf, or bfws
         # planner_options = '--k-M-BFWS 2 --max_novelty 1' # make sure they make sense with the planner choice
         # planner_cmd = "%s/planners/%s --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt %s" % (planner_path, chosen_planner, planner_options)
-        
+
         if old_planner:
             planner_cmd = "%s/planners/siw-then-bfsf --domain pdkb-domain.pddl --problem pdkb-problem.pddl --output pdkb-plan.txt" % planner_path
         else:
