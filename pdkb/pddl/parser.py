@@ -274,8 +274,13 @@ class Problem(object):
             object_list = PDDL_Utils.read_type(parse_tree[":constants"])
             self._add_objects(object_list)
 
-        #TODO this may not be correct, depending on the type hierchy
-        const_map = {const: list(self.obj_to_type[const])[0] for const in self.objects}
+        #TODO this may not be correct, depending on the type hierarchy
+        const_map = dict()
+        for const in self.objects:
+            if len(self.obj_to_type[const]) == 0:
+                raise RuntimeError("No type for constant object %s" % const)
+            else:
+                const_map[const] = list(self.obj_to_type[const])[0]
 
         self.predicates = [self.to_predicate(c, map=const_map) for c in parse_tree[":predicates"].children]
 

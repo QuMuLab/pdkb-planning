@@ -4,6 +4,7 @@ import os, sys, time, pickle
 
 from .actions import *
 from .problems import *
+from .translator import *
 
 def cleanup():
     os.system('rm -f pdkb-domain.pddl')
@@ -18,28 +19,8 @@ def solve(pdkbddl_file, old_planner=False):
 
     print()
 
-    if not os.path.isdir('.problem-cache'):
-        os.mkdir('.problem-cache')
-
     t_start = time.time()
-
-    print("Parsing problem...", end=' ')
-    sys.stdout.flush()
-    problem = parse_pdkbddl(pdkbddl_file)
-    print("done!")
-
-    print("Preprocessing problem...", end=' ')
-    sys.stdout.flush()
-    prob_hash = hash(pickle.dumps(problem))
-    fname = ".problem-cache/%s" % str(prob_hash)
-    if os.path.isfile(fname) and not os.path.isfile('.nocache'):
-        problem = pickle.load(open(fname, 'r'))
-        print("done! (from cache)")
-    else:
-        problem.preprocess()
-        with open(fname, 'wb') as f:
-            pickle.dump(problem, f, 2)
-        print("done!")
+    parse_and_preprocess(pdkbddl_file)
 
     print("Solving problem...", end=' ')
     sys.stdout.flush()

@@ -4,8 +4,24 @@ This repository houses the code for solving Multi-agent Epistemic Planning (MEP)
 
 Eventually, more documentation will be added to the project, but feel free to [contact me](http://haz.ca/contact.html) if you have any questions. For a demo and more information on the project, [[click here](http://pdkb.haz.ca/)].
 
+## Getting started ##
 
-### Requirements ###
+### Using Docker ###
+
+```sh
+docker build -t pdkbplanning:latest .
+docker run -it pdkbplanning
+```
+
+You end up in a shell running in the Docker container,
+which has all the required tools installed.
+Then you can run the planner on an example PKDBDDL problem:
+
+```sh
+python3 -m pdkb.planner /MEP/pdkb-planning/examples/planning/grapevine/prob-paper1.pdkbddl
+```
+
+## Requirements ##
 * [Graphviz](http://graphviz.org/)
 * [NetworkX](http://networkx.github.io/)
 * [Pygraphviz](http://networkx.lanl.gov/pygraphviz/index.html)
