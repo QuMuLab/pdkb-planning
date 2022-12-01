@@ -20,7 +20,7 @@ def solve(pdkbddl_file, old_planner=False):
     print()
 
     t_start = time.time()
-    parse_and_preprocess(pdkbddl_file)
+    problem = parse_and_preprocess(pdkbddl_file)
 
     print("Solving problem...", end=' ')
     sys.stdout.flush()
