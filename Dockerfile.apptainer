@@ -46,6 +46,3 @@ RUN chmod -R 777 /MEP/bin
 
 # default command to execute when container starts
 ENTRYPOINT [ "/MEP/bin/rpmep" ]
-# ENTRYPOINT [ "python3 -m pdkb.planner" ]
-# CMD python3 -m pdkb.planner
-# CMD /bin/bash
