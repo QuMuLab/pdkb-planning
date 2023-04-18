@@ -1,0 +1,230 @@
+; Domain and problem specification for a simplified version of Hanabi.
+; Written for Assignment 8 - Epistemic Planning for CISC 813 at Queen's University.
+; Author: Chris Yeung
+
+(define (domain hanabi)
+
+    (:agents a b c)
+
+    (:types card color pile)
+
+    (:predicates
+            (holding ?a - agent ?c - card)
+            (card-color ?ca - card ?co - color)
+        {AK}(after ?c1 ?c2 - card)
+        {AK}(on ?c1 ?c2 - card ?p - pile)
+        {AK}(top ?c - card ? - pile)
+    )
+
+    (:action play
+        :derive-condition   always
+        :parameters         (?a - agent ?ca1 ?ca2 - card ?co - color ?p - pile)
+        :precondition       (and
+                                (after ?ca1 ?ca2)
+                                (top ?ca2 ?p)
+                                (card-color ?ca2 ?co)
+                                (holding ?a ?ca1)
+                                (card-color ?ca1 ?co)
+                                [?a](holding ?a ?ca1)
+                                [?a](card-color ?ca1 ?co)
+                            )
+        :effect             (and
+                                (!top ?ca1 ?p)
+                                (!holding ?a ?ca1)
+                                (on ?ca1 ?ca2 ?p)
+                                (top ?ca1 ?p)
+                            )
+    )
+
+    (:action give-number-hint
+        :derive-condition   always
+        :parameters         (?a1 ?a2 - agent ?c - card)
+        :precondition       (and
+                                (holding ?a2 ?c)
+                                [?a1](holding ?a2 ?c)
+                            )
+        :effect             (and
+                                [?a2](holding ?a2 ?c)
+                                [?a2][?a1](holding ?a2 ?c)
+                            )
+    )
+
+    (:action give-color-hint
+        :derive-condition   always
+        :parameters         (?a1 ?a2 - agent ?ca - card ?co - color)
+        :precondition       (and
+                                (card-color ?ca ?co)
+                                (holding ?a2 ?ca)
+                                [?a1](card-color ?ca ?co)
+                                [?a1](holding ?a2 ?ca)
+                            )
+        :effect             (and
+                                [?a2](card-color ?ca ?co)
+                                [?a2][?a1](card-color ?ca ?co)
+                            )
+    )
+
+)
+
+
+(define (problem hanabi_1)
+
+    (:domain hanabi)
+
+    ; Red, green, and blue cards from 1 to 6
+    (:objects
+        r0 r1 r2 r3 r4 r5 - card
+        g0 g1 g2 g3 g4 g5 - card
+        b0 b1 b2 b3 b4 b5 - card
+        red green blue - color
+        pr pg pb - pile
+    )
+
+    (:projection )
+    (:task valid_generation)
+
+    (:init-type complete)
+    (:init
+        ; Card colors
+        (card-color r0 red)
+        (card-color r1 red)
+        (card-color r2 red)
+        (card-color r3 red)
+        (card-color r4 red)
+        (card-color r5 red)
+
+        (card-color g0 green)
+        (card-color g1 green)
+        (card-color g2 green)
+        (card-color g3 green)
+        (card-color g4 green)
+        (card-color g5 green)
+
+        (card-color b0 blue)
+        (card-color b1 blue)
+        (card-color b2 blue)
+        (card-color b3 blue)
+        (card-color b4 blue)
+        (card-color b5 blue)
+
+        ; Order of cards
+        (after r1 r0)
+        (after r2 r1)
+        (after r3 r2)
+        (after r4 r3)
+        (after r5 r4)
+
+        (after g1 g0)
+        (after g2 g1)
+        (after g3 g2)
+        (after g4 g3)
+        (after g5 g4)
+
+        (after b1 b0)
+        (after b2 b1)
+        (after b3 b2)
+        (after b4 b3)
+        (after b5 b4)
+
+        ; Initialize piles to play cards on
+        (top r0 pr)
+        (top g0 pg)
+        (top b0 pb)
+
+        ; Which agent is holding which cards
+        (holding a r1)
+        (holding a g2)
+        (holding a b3)
+        (holding a r4)
+        (holding a g5)
+
+        (holding b b1)
+        (holding b r2)
+        (holding b g3)
+        (holding b b4)
+        (holding b r5)
+
+        (holding c g1)
+        (holding c b2)
+        (holding c r3)
+        (holding c g4)
+        (holding c b5)
+
+        ; Agent can see other agent's cards but not their own
+        [a](holding b b1)
+        [a](holding b r2)
+        [a](holding b g3)
+        [a](holding b b4)
+        [a](holding b r5)
+        [a](holding c g1)
+        [a](holding c b2)
+        [a](holding c r3)
+        [a](holding c g4)
+        [a](holding c b5)
+
+        [b](holding a r1)
+        [b](holding a g2)
+        [b](holding a b3)
+        [b](holding a r4)
+        [b](holding a g5)
+        [b](holding c g1)
+        [b](holding c b2)
+        [b](holding c r3)
+        [b](holding c g4)
+        [b](holding c b5)
+
+        [c](holding a r1)
+        [c](holding a g2)
+        [c](holding a b3)
+        [c](holding a r4)
+        [c](holding a g5)
+        [c](holding b b1)
+        [c](holding b r2)
+        [c](holding b g3)
+        [c](holding b b4)
+        [c](holding b r5)
+
+        ; Agent can see other agent's card colors
+        [a](card-color b1 blue)
+        [a](card-color r2 red)
+        [a](card-color g3 green)
+        [a](card-color b4 blue)
+        [a](card-color r5 red)
+        [a](card-color g1 green)
+        [a](card-color b2 blue)
+        [a](card-color r3 red)
+        [a](card-color g4 green)
+        [a](card-color b5 blue)
+
+        [b](card-color r1 red)
+        [b](card-color g2 green)
+        [b](card-color b3 blue)
+        [b](card-color r4 red)
+        [b](card-color g5 green)
+        [b](card-color g1 green)
+        [b](card-color b2 blue)
+        [b](card-color r3 red)
+        [b](card-color g4 green)
+        [b](card-color b5 blue)
+
+        [c](card-color r1 red)
+        [c](card-color g2 green)
+        [c](card-color b3 blue)
+        [c](card-color r4 red)
+        [c](card-color g5 green)
+        [c](card-color b1 blue)
+        [c](card-color r2 red)
+        [c](card-color g3 green)
+        [c](card-color b4 blue)
+        [c](card-color r5 red)
+    )
+
+    (:depth 2)
+
+    (:goal
+        (top r5 pr)
+        (top g5 pg)
+        (top b5 pb)
+    )
+
+)
