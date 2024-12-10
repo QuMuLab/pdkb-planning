@@ -1,8 +1,0 @@
-
-(define (domain grapevine)
-
-    (:agents a b c d)
-
-    {include:domain.pdkbddl}
-    
-)
