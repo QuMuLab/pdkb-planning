@@ -1,0 +1,3 @@
+[submodule "examples/epistemic-domains"]
+	path = examples/epistemic-domains
+	url = https://github.com/AI-Planning/epistemic-domains
